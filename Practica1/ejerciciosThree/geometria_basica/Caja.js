@@ -7,15 +7,12 @@ class Caja extends THREE.Object3D {
     // Se crea primero porque otros métodos usan las variables que se definen para la interfaz
     this.createGUI(gui,titleGui);
     
-    // Un Mesh se compone de geometría y material
-    var boxGeom = new THREE.BoxGeometry (1,1,1);
-    // Como material se crea uno a partir de un color
-    var boxMat = new THREE.MeshNormalMaterial();
-    
-    // Ya podemos construir el Mesh
-    var box = new THREE.Mesh (boxGeom, boxMat);
-    // Y añadirlo como hijo del Object3D (el this)
-    this.add (box);
+    var ejes = this.createAxis();
+
+    this.caja = this.createCaja();
+
+    this.add(ejes);
+    this.add(this.caja);
     
     // Las geometrías se crean centradas en el origen.
     // Como queremos que el sistema de referencia esté en la base,
@@ -48,6 +45,26 @@ class Caja extends THREE.Object3D {
     folder.add (this.guiControls, 'sizeZ', 0.1, 5.0, 0.1).name ('Dimensión Z : ').listen();
     folder.add (this.guiControls, 'reset').name ('[ Reset ]');
   }
+
+  createAxis(){
+    this.axis = new THREE.AxesHelper (5);
+    this.add (this.axis);
+  }
+
+  createCaja(){
+    // Un Mesh se compone de geometría y material
+    var boxGeom = new THREE.BoxGeometry (1,1,1);
+    // Como material se crea uno a partir de un color
+    var boxMat = new THREE.MeshNormalMaterial();
+    
+    // Ya podemos construir el Mesh
+    var box = new THREE.Mesh (boxGeom, boxMat);
+
+    var caja = new THREE.Object3D();
+    caja.add(box);
+
+    return caja;
+  }
   
   update () {
     // Con independencia de cómo se escriban las 3 siguientes líneas, el orden en el que se aplican las transformaciones es:
@@ -58,8 +75,8 @@ class Caja extends THREE.Object3D {
     // Y por último la traslación
     this.position.set (10,1,0);
     this.scale.set (this.guiControls.sizeX,this.guiControls.sizeY,this.guiControls.sizeZ);
-    this.rotation.y += 0.01;
-    this.rotation.x += 0.01;
-    this.rotation.z += 0.01;
+    this.caja.rotation.y += 0.01;
+    this.caja.rotation.x += 0.01;
+    this.caja.rotation.z += 0.01;
   }
 }
