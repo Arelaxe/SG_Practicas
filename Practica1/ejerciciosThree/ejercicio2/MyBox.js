@@ -1,5 +1,5 @@
  
-class Caja extends THREE.Object3D {
+class MyBox extends THREE.Object3D {
   constructor(gui,titleGui) {
     super();
     
@@ -7,16 +7,20 @@ class Caja extends THREE.Object3D {
     // Se crea primero porque otros métodos usan las variables que se definen para la interfaz
     this.createGUI(gui,titleGui);
     
-    var ejes = this.createAxis();
-
-    this.caja = this.createCaja();
-
-    this.add(ejes);
-    this.add(this.caja);
+    // Un Mesh se compone de geometría y material
+    var boxGeom = new THREE.BoxGeometry (1,1,1);
+    // Como material se crea uno a partir de un color
+    var boxMat = new THREE.MeshNormalMaterial();
+    
+    // Ya podemos construir el Mesh
+    var box = new THREE.Mesh (boxGeom, boxMat);
+    // Y añadirlo como hijo del Object3D (el this)
+    this.add (box);
     
     // Las geometrías se crean centradas en el origen.
     // Como queremos que el sistema de referencia esté en la base,
     // subimos el Mesh de la caja la mitad de su altura
+    box.position.y = 0.5;
   }
   
   createGUI (gui,titleGui) {
@@ -25,6 +29,15 @@ class Caja extends THREE.Object3D {
       this.sizeX = 1.0;
       this.sizeY = 1.0;
       this.sizeZ = 1.0;
+
+      this.rotX = 0.0;
+      this.rotY = 0.0;
+      this.rotZ = 0.0;
+      
+      this.posX = 0.0;
+      this.posY = 0.0;
+      this.posZ = 0.0;
+      
       
       // Un botón para dejarlo todo en su posición inicial
       // Cuando se pulse se ejecutará esta función.
@@ -32,6 +45,15 @@ class Caja extends THREE.Object3D {
         this.sizeX = 1.0;
         this.sizeY = 1.0;
         this.sizeZ = 1.0;
+
+        this.rotX = 0.0;
+        this.rotY = 0.0;
+        this.rotZ = 0.0;
+        
+        this.posX = 0.0;
+        this.posY = 0.0;
+        this.posZ = 0.0;
+
       }
     } 
     
@@ -40,30 +62,11 @@ class Caja extends THREE.Object3D {
     // Estas lineas son las que añaden los componentes de la interfaz
     // Las tres cifras indican un valor mínimo, un máximo y el incremento
     // El método   listen()   permite que si se cambia el valor de la variable en código, el deslizador de la interfaz se actualice
-    folder.add (this.guiControls, 'sizeX', 0.1, 5.0, 0.1).name ('Dimensión X : ').listen();
-    folder.add (this.guiControls, 'sizeY', 0.1, 5.0, 0.1).name ('Dimensión Y : ').listen();
-    folder.add (this.guiControls, 'sizeZ', 0.1, 5.0, 0.1).name ('Dimensión Z : ').listen();
-    folder.add (this.guiControls, 'reset').name ('[ Reset ]');
-  }
-
-  createAxis(){
-    this.axis = new THREE.AxesHelper (5);
-    this.add (this.axis);
-  }
-
-  createCaja(){
-    // Un Mesh se compone de geometría y material
-    var boxGeom = new THREE.BoxGeometry (1,1,1);
-    // Como material se crea uno a partir de un color
-    var boxMat = new THREE.MeshNormalMaterial();
+    folder.add (this.guiControls, 'sizeX', 0.1, 5.0, 0.1).name ('Dimension X : ').listen();
+    folder.add (this.guiControls, 'sizeY', 0.1, 5.0, 0.1).name ('Dimension Y : ').listen();
+    folder.add (this.guiControls, 'sizeZ', 0.1, 5.0, 0.1).name ('Dimension Z : ').listen();
     
-    // Ya podemos construir el Mesh
-    var box = new THREE.Mesh (boxGeom, boxMat);
-
-    var caja = new THREE.Object3D();
-    caja.add(box);
-
-    return caja;
+    folder.add (this.guiControls, 'reset').name ('[ Reset ]');
   }
   
   update () {
@@ -73,10 +76,9 @@ class Caja extends THREE.Object3D {
     // Después, la rotación en Y
     // Luego, la rotación en X
     // Y por último la traslación
-    this.position.set (10,1,0);
-    this.caja.scale.set (this.guiControls.sizeX,this.guiControls.sizeY,this.guiControls.sizeZ);
-    this.caja.rotation.y += 0.01;
-    this.caja.rotation.x += 0.01;
-    this.caja.rotation.z += 0.01;
+    this.position.set (this.guiControls.posX,this.guiControls.posY,this.guiControls.posZ);
+    this.rotation.set (this.guiControls.rotX,this.guiControls.rotY,this.guiControls.rotZ);
+    this.scale.set (this.guiControls.sizeX,this.guiControls.sizeY,this.guiControls.sizeZ);
+    
   }
 }
