@@ -35,9 +35,11 @@ class MyScene extends THREE.Scene {
     this.model = new Caja(this.gui, "Dimensiones de la Caja");
     this.model2 = new Cilindro(this.gui, "Dimensiones del Cilindro") ;
     this.model3 = new Cono(this.gui, "Dimensiones del Cono") ;
+    this.model5 = new Toro(this.gui, "Dimensiones del Toro:");
     this.add (this.model);
     this.add (this.model2);
     this.add (this.model3);
+    this.add (this.model5);
   }
   
   createCamera () {
@@ -168,6 +170,7 @@ class MyScene extends THREE.Scene {
     this.model.update();
     this.model2.update() ;
     this.model3.update() ;
+    this.model5.update() ;
     
     // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
     this.renderer.render (this, this.getCamera());

@@ -1,5 +1,4 @@
- 
-class Cono extends THREE.Object3D {
+ class Cono extends THREE.Object3D {
     constructor(gui,titleGui) {
       super();
       
