@@ -27,7 +27,7 @@ class Cono extends THREE.Object3D {
       this.guiControls = new function () {
         this.radius = 1.0 ;
         this.height = 1.0 ;
-        this.segments = 5.0 ;
+        this.segments = 3.0 ;
         
         // Un botón para dejarlo todo en su posición inicial
         // Cuando se pulse se ejecutará esta función.
@@ -49,29 +49,19 @@ class Cono extends THREE.Object3D {
       // El método   listen()   permite que si se cambia el valor de la variable en código, el deslizador de la interfaz se actualice
       folder.add (this.guiControls, 'radius', 0.1, 5, 0.1).name ('Radio: ').listen()
       .onChange(function(){
-          that.remove(that.cono) ;
-          that.cono = that.createCono() ;
-          that.add(that.cono) ;
+          that.modifyCono();
         }) ;
       folder.add (this.guiControls, 'height', 0.1, 5.0, 0.1).name ('Altura : ').listen()
       .onChange(function(){
-        that.remove(that.cono) ;
-        console.log("Altura" + that.guiControls.height) ;
-        that.cono = that.createCono() ;
-        that.add(that.cono) ;
+        that.modifyCono();
     });
-      folder.add (this.guiControls, 'segments', 5, 50, 1).name ('Resolución : ').listen()
+      folder.add (this.guiControls, 'segments', 3, 50, 1).name ('Resolución : ').listen()
       .onChange(function(){
-        that.remove(that.cono) ;
-        console.log("Segmentos" + that.guiControls.segments) ;
-        that.cono = that.createCono() ;
-        that.add(that.cono) ;
+        that.modifyCono();
     }) ;
       folder.add (this.guiControls, 'reset').name ('[ Reset ]').onChange(
         function(){
-          that.remove(that.cono) ;
-          that.cono = that.createCono() ;
-          that.add(that.cono) ;
+          that.modifyCono();
         });
     }
     
@@ -95,6 +85,11 @@ class Cono extends THREE.Object3D {
       cono.add(cone);
   
       return cono;
+    }
+
+    modifyCono(){
+        var coneGeom = new THREE.ConeGeometry(this.guiControls.radius,this.guiControls.height,this.guiControls.segments);
+        this.cono.children[0].geometry = coneGeom;
     }
     
     update () {
