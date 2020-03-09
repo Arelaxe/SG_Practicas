@@ -34,8 +34,10 @@ class MyScene extends THREE.Scene {
     // la gui y el texto bajo el que se agruparán los controles de la interfaz que añada el modelo.
     this.model = new Caja(this.gui, "Dimensiones de la Caja");
     this.model2 = new Cilindro(this.gui, "Dimensiones del Cilindro") ;
+    this.model3 = new Cono(this.gui, "Dimensiones del Cono") ;
     this.add (this.model);
-    this.add (this.model2) ;
+    this.add (this.model2);
+    this.add (this.model3);
   }
   
   createCamera () {
@@ -165,6 +167,7 @@ class MyScene extends THREE.Scene {
     // Se actualiza el resto del modelo
     this.model.update();
     this.model2.update() ;
+    this.model3.update() ;
     
     // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
     this.renderer.render (this, this.getCamera());
