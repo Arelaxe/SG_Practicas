@@ -81,9 +81,9 @@ class Toro extends THREE.Object3D{
     }
 
     update () {
-        this.position.set = (7,7,0);
-        this.toro.rotation.y += 0.01;
-        this.toro.rotation.x += 0.01;
-        this.toro.rotation.z += 0.01;
+      this.position.set (10,7,0);
+      this.toro.rotation.y += 0.01;
+      this.toro.rotation.x += 0.01;
+      this.toro.rotation.z += 0.01;
     }
 }
