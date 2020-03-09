@@ -56,43 +56,25 @@ class Cilindro extends THREE.Object3D {
       // Estas lineas son las que añaden los componentes de la interfaz
       // Las tres cifras indican un valor mínimo, un máximo y el incremento
       // El método   listen()   permite que si se cambia el valor de la variable en código, el deslizador de la interfaz se actualice
-      folder.add (this.guiControls, 'sizeX', 0.1, 5.0, 0.1).name ('Dimensión X : ').listen();
-      folder.add (this.guiControls, 'sizeY', 0.1, 5.0, 0.1).name ('Dimensión Y : ').listen();
-      folder.add (this.guiControls, 'sizeZ', 0.1, 5.0, 0.1).name ('Dimensión Z : ').listen();
       folder.add (this.guiControls, 'radiusTop', 0.1, 5, 0.1).name ('Radio superior : ').listen()
       .onChange(function(){
-          that.remove(that.cilindro) ;
-          console.log("RadSup" + that.guiControls.radiusTop) ;
-          that.cilindro = that.createCilindro() ;
-          that.add(that.cilindro) ;
+          that.modifyCilindro() ;
         }) ;
       folder.add (this.guiControls, 'radiusBottom', 0.1, 5, 0.1).name ('Radio inferior : ').listen()
       .onChange(function(){
-          that.remove(that.cilindro) ;
-          console.log("RadInf" + that.guiControls.radiusBottom) ;
-          that.cilindro = that.createCilindro() ;
-          that.add(that.cilindro) ;
+          that.modifyCilindro() ;
       }) ;
       folder.add (this.guiControls, 'height', 0.1, 5.0, 0.1).name ('Altura : ').listen()
       .onChange(function(){
-        that.remove(that.cilindro) ;
-        console.log("Altura" + that.guiControls.height) ;
-        that.cilindro = that.createCilindro() ;
-        that.add(that.cilindro) ;
+        that.modifyCilindro() ;
     });
       folder.add (this.guiControls, 'segments', 5, 50, 1).name ('Resolución : ').listen()
       .onChange(function(){
-        that.remove(that.cilindro) ;
-        console.log("Segmentos" + that.guiControls.segments) ;
-        that.cilindro = that.createCilindro() ;
-        that.add(that.cilindro) ;
+        that.modifyCilindro() ;
     }) ;
       folder.add (this.guiControls, 'reset').name ('[ Reset ]').onChange(
         function(){
-          that.remove(that.cilindro) ;
-          console.log("RESET" + that.guiControls.radiusBottom) ;
-          that.cilindro = that.createCilindro() ;
-          that.add(that.cilindro) ;
+          that.modifyCilindro() ;
         });
     }
     
@@ -117,6 +99,13 @@ class Cilindro extends THREE.Object3D {
   
       return cilindro;
     }
+
+    modifyCilindro(){
+      //children posee a los ejes y la malla. Children[0] incluye la malla.
+      var cylGeom = new THREE.CylinderGeometry (this.guiControls.radiusTop,this.guiControls.radiusBottom,this.guiControls.height,this.guiControls.segments);
+      console.log(this.cilindro.children[0].geometry) ;
+      this.cilindro.children[0].geometry = cylGeom ;
+    }
     
     update () {
       // Con independencia de cómo se escriban las 3 siguientes líneas, el orden en el que se aplican las transformaciones es:
@@ -125,8 +114,7 @@ class Cilindro extends THREE.Object3D {
       // Después, la rotación en Y
       // Luego, la rotación en X
       // Y por último la traslación
-      this.position.set (0,10,0);
-      this.cilindro.scale.set (this.guiControls.sizeX,this.guiControls.sizeY,this.guiControls.sizeZ);
+      this.position.set (0,7,0);
       this.cilindro.rotation.y += 0.01;
       this.cilindro.rotation.x += 0.01;
       this.cilindro.rotation.z += 0.01;
