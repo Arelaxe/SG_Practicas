@@ -33,7 +33,9 @@ class MyScene extends THREE.Scene {
       // El modelo puede incluir su parte de la interfaz gráfica de usuario. Le pasamos la referencia a 
       // la gui y el texto bajo el que se agruparán los controles de la interfaz que añada el modelo.
       this.model = new Corazon();
+      this.model2 = new Diamante();
       this.add (this.model);
+      this.add (this.model2);
     }
     
     createCamera () {
@@ -162,6 +164,7 @@ class MyScene extends THREE.Scene {
       
       // Se actualiza el resto del modelo
       this.model.update();
+      this.model2.update();
       
       // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
       this.renderer.render (this, this.getCamera());
