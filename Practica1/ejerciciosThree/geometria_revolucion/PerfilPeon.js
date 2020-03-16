@@ -69,7 +69,7 @@ class PerfilPeon extends THREE.Object3D {
     createPeonModificable(){
         var puntos = this.createPuntos() ;
         var material = new THREE.MeshNormalMaterial();
-        var latGeom = new THREE.LatheGeometry(puntos, this.guiControls.segments, this.guiControls.angulo) ;
+        var latGeom = new THREE.LatheGeometry(puntos, this.guiControls.segments, 0.0, 1.0) ;
 
         var peonModificable = new THREE.Mesh(latGeom, material) ;
 
@@ -82,14 +82,14 @@ class PerfilPeon extends THREE.Object3D {
   
         // Controles para el tamaño, la orientación y la posición de la caja
         this.guiControls = new function () {
-          this.angle = 0.0 ;
-          this.segments = 5 ;
+          this.angle = 1 ;
+          this.segments = 3 ;
           
           // Un botón para dejarlo todo en su posición inicial
           // Cuando se pulse se ejecutará esta función.
           this.reset = function () {
-            this.angle = 0.0 ;
-            this.segments = 5;
+            this.angle = 1 ;
+            this.segments = 3;
           }
         } 
   
@@ -98,11 +98,11 @@ class PerfilPeon extends THREE.Object3D {
         // Estas lineas son las que añaden los componentes de la interfaz
         // Las tres cifras indican un valor mínimo, un máximo y el incremento
         // El método   listen()   permite que si se cambia el valor de la variable en código, el deslizador de la interfaz se actualice
-        folder.add (this.guiControls, 'segments', 5, 50, 1).name ('Resolución : ').listen()
+        folder.add (this.guiControls, 'segments', 3, 20, 1).name ('Resolución : ').listen()
         .onChange(function(){
           that.modifyPeon();
       }) ;
-      folder.add (this.guiControls, 'angle', 0.0, 2*Math.PI, 0.1).name ('Ángulo : ').listen()
+      folder.add (this.guiControls, 'angle', 0.1, 2*Math.PI, 0.1).name ('Ángulo : ').listen()
         .onChange(function(){
           that.modifyPeon();
       }) ;
