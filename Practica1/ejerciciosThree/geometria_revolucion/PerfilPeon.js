@@ -6,6 +6,7 @@ class PerfilPeon extends THREE.Object3D {
 
         var ejes = this.createAxis();
         var ejes2 = this.createAxis();
+        var ejes3 = this.createAxis() ;
         this.perfilPeon = this.createPerfilPeon();
         this.figuraPeon = this.createFiguraPeon() ;
         this.modificablePeon = this.createPeonModificable() ;
