@@ -34,8 +34,12 @@ class MyScene extends THREE.Scene {
       // la gui y el texto bajo el que se agruparán los controles de la interfaz que añada el modelo.
       this.model = new Corazon();
       this.model2 = new Diamante();
+      this.model3 = new Pica();
+      this.model4 = new Trebol();
       this.add (this.model);
       this.add (this.model2);
+      this.add (this.model3);
+      this.add (this.model4);
     }
     
     createCamera () {
@@ -45,7 +49,7 @@ class MyScene extends THREE.Scene {
       //   Los planos de recorte cercano y lejano
       this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
       // También se indica dónde se coloca
-      this.camera.position.set (20, 10, 20);
+      this.camera.position.set (0, 0, 100);
       // Y hacia dónde mira
       var look = new THREE.Vector3 (0,0,0);
       this.camera.lookAt(look);
@@ -165,6 +169,8 @@ class MyScene extends THREE.Scene {
       // Se actualiza el resto del modelo
       this.model.update();
       this.model2.update();
+      this.model3.update();
+      this.model4.update();
       
       // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
       this.renderer.render (this, this.getCamera());

@@ -15,15 +15,17 @@ class Diamante extends THREE.Object3D {
       
         var contorno = new THREE.Shape() ;
 
-        contorno.lineTo(10,12.5) ;
-        contorno.lineTo(0,25) ;
-        contorno.lineTo(-10,12.5) ;
+        contorno.lineTo(5,6.25) ;
+        contorno.lineTo(0,12.5) ;
+        contorno.lineTo(-5,6.25) ;
         contorno.lineTo(0,0) ;
 
 
-        var extrudeSettings = { amount: 8, bevelEnabled: true, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
+        var extrudeSettings = { amount: 1, bevelEnabled: true, bevelSegments: 5, steps: 5, bevelSize: 1, bevelThickness: 1 };
 
         var geometry = new THREE.ExtrudeBufferGeometry( contorno, extrudeSettings );
+
+        geometry.translate(0,5,0);
 
         var mesh = new THREE.Mesh( geometry, new THREE.MeshPhongMaterial({color : 0xff0000}) );
 
@@ -32,5 +34,6 @@ class Diamante extends THREE.Object3D {
 
     
     update () {
+      this.position.set(-20,10,0);
     }
   }

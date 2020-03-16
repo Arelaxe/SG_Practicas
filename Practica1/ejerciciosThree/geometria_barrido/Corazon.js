@@ -12,25 +12,28 @@ class Corazon extends THREE.Object3D {
     }
   
     createCorazon(){
-        var contorno = new THREE.Shape();
+      var contorno = new THREE.Shape();
 
-        contorno.bezierCurveTo( 25, 25, 20, 0, 0, 0 );
-        contorno.bezierCurveTo( 30, 0, 30, 35,30,35 );
-        contorno.bezierCurveTo( 30, 55, 10, 77, 25, 95 );
-        contorno.bezierCurveTo( 60, 77, 80, 55, 80, 35 );
-        contorno.bezierCurveTo( 80, 35, 80, 0, 50, 0 );
-        contorno.bezierCurveTo( 35, 0, 25, 25, 25, 25 );
-        
-        var extrudeSettings = { amount: 8, bevelEnabled: true, bevelSegments: 2, steps: 2, bevelSize: 1, bevelThickness: 1 };
+      contorno.bezierCurveTo(-0.5,1,-1,3,-5,5);
+      contorno.bezierCurveTo(-7,6,-7.5,8,-7,9);
+      contorno.bezierCurveTo(-6,12,-4,13,0,9);
+      contorno.bezierCurveTo(4,13,6,12,7,9);
+      contorno.bezierCurveTo(7.5,8,7,6,5,5);
+      contorno.bezierCurveTo(1,3,0.5,1,0,0);
 
-        var geometry = new THREE.ExtrudeBufferGeometry( contorno, extrudeSettings );
+      var extrudeSettings = { amount: 1, bevelEnabled: true, bevelSegments: 5, steps: 5, bevelSize: 1, bevelThickness: 1 };
 
-        var mesh = new THREE.Mesh( geometry, new THREE.MeshPhongMaterial() );
+      var geometry = new THREE.ExtrudeBufferGeometry( contorno, extrudeSettings );
 
-        return (mesh);
+      geometry.translate(0,6.5,0);
+
+      var mesh = new THREE.Mesh( geometry, new THREE.MeshPhongMaterial({color : 0xff0000}) );
+
+      return (mesh);
     }
 
     
     update () {
+      this.position.set(20,-20,0);
     }
   }
