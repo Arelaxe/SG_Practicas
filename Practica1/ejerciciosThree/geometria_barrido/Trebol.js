@@ -25,15 +25,11 @@ class Trebol extends THREE.Object3D {
     createTrebol(){
         var contorno = new THREE.Shape();
 
-        contorno.moveTo(0,2);
+        contorno.moveTo(0,0);
         
-        contorno.bezierCurveTo(-1,-0.5,-4,-1,-4.5,1);
-        contorno.bezierCurveTo(-2,0,-4,0,-4.5,1);
-        contorno.bezierCurveTo(-5,2,-5.5,4,-1,4);
-        contorno.bezierCurveTo(-4,6,-3,8,0,9);
-        contorno.bezierCurveTo(3,8,4,6,1,4);
-        contorno.bezierCurveTo(1,4,5.5,4,5,2);
-        contorno.bezierCurveTo(4.5,1,4,0,0,2);
+        contorno.bezierCurveTo(5,-4.5,7,3.5,1.5,3);
+        contorno.bezierCurveTo(4.6,9,-4.6,9,-1.5,3);
+        contorno.bezierCurveTo(-7,3.5,-4.5,-5,0,0);
 
         var extrudeSettings = { amount: 1, bevelEnabled: true, bevelSegments: 5, steps: 5, bevelSize: 1, bevelThickness: 1 };
 
@@ -46,7 +42,7 @@ class Trebol extends THREE.Object3D {
         var puntos = this.createPuntos();
         var latGeom = new THREE.LatheGeometry(puntos, 20) ;
 
-        latGeom.translate(0,-10,0);
+        latGeom.translate(0,-7,0);
 
         var base = new THREE.Mesh(latGeom, new THREE.MeshPhongMaterial({color : 0x0000ff}));
 
@@ -59,6 +55,6 @@ class Trebol extends THREE.Object3D {
 
     
     update () {
-        //this.position.set(-20,-7.5,0);
+        this.position.set(-20,-7.5,0);
     }
   }
