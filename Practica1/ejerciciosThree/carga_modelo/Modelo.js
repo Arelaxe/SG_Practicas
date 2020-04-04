@@ -31,6 +31,6 @@ class Modelo extends THREE.Object3D{
     }
 
     update(){
-       this.children[0].rotation.y += 0.01;
+       this.rotation.y += 0.01;
     }
 }

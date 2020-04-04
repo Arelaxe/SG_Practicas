@@ -23,25 +23,11 @@ class MyScene extends THREE.Scene {
       // Tendremos una cámara con un control de movimiento con el ratón
       this.createCamera ();
       
-      // Y unos ejes. Imprescindibles para orientarnos sobre dónde están las cosas
-      this.axis = new THREE.AxesHelper (5);
-      this.add (this.axis);
-  
-      
-      
       // Por último creamos el modelo.
       // El modelo puede incluir su parte de la interfaz gráfica de usuario. Le pasamos la referencia a 
       // la gui y el texto bajo el que se agruparán los controles de la interfaz que añada el modelo.
-      this.model = new Corazon();
-      this.model2 = new Diamante();
-      this.model3 = new Pica();
-      this.model4 = new Trebol();
-      this.model5 = new CorazonArrastre() ;
+      this.model = new Pendulos(this.gui,'Parametros de pendulo:');
       this.add (this.model);
-      this.add (this.model2);
-      this.add (this.model3);
-      this.add (this.model4);
-      this.add (this.model5);
     }
     
     createCamera () {
@@ -51,7 +37,7 @@ class MyScene extends THREE.Scene {
       //   Los planos de recorte cercano y lejano
       this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
       // También se indica dónde se coloca
-      this.camera.position.set (0, 0, 100);
+      this.camera.position.set (20, 10, 20);
       // Y hacia dónde mira
       var look = new THREE.Vector3 (0,0,0);
       this.camera.lookAt(look);
@@ -162,17 +148,11 @@ class MyScene extends THREE.Scene {
       // Se actualiza la intensidad de la luz con lo que haya indicado el usuario en la gui
       this.spotLight.intensity = this.guiControls.lightIntensity;
       
-      // Se muestran o no los ejes según lo que idique la GUI
-      this.axis.visible = this.guiControls.axisOnOff;
-      
       // Se actualiza la posición de la cámara según su controlador
       this.cameraControl.update();
       
       // Se actualiza el resto del modelo
       this.model.update();
-      this.model2.update();
-      this.model3.update();
-      this.model4.update();
       
       // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
       this.renderer.render (this, this.getCamera());
