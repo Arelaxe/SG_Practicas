@@ -25,15 +25,24 @@ class Corazon extends THREE.Object3D {
 
       var geometry = new THREE.ExtrudeBufferGeometry( contorno, extrudeSettings );
 
-      geometry.translate(0,6.5,0);
+      geometry.translate(0,-5,0);
 
-      var mesh = new THREE.Mesh( geometry, new THREE.MeshPhongMaterial({color : 0xff0000}) );
+      this.ab = new THREE.Mesh( geometry, new THREE.MeshPhongMaterial({color : 0xff0000}) );
 
-      return (mesh);
+      this.cd = new THREE.Object3D();
+      this.cd.position.x = 15;
+      this.cd.position.y = -15;
+      this.cd.add(this.ab);
+
+      this.e = new THREE.Object3D();
+      this.e.add(this.cd);
+
+      return this.e;
     }
 
-    
     update () {
-      this.position.set(20,-20,0);
+      this.e.rotation.z += 0.01;
+      this.cd.rotation.z -= 0.01;
+      this.ab.rotation.y += 0.01;
     }
   }

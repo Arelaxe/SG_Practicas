@@ -25,15 +25,25 @@ class Diamante extends THREE.Object3D {
 
         var geometry = new THREE.ExtrudeBufferGeometry( contorno, extrudeSettings );
 
-        geometry.translate(0,5,0);
+        geometry.translate(0,-5,0);
 
-        var mesh = new THREE.Mesh( geometry, new THREE.MeshPhongMaterial({color : 0xff0000}) );
+        this.mesh = new THREE.Mesh( geometry, new THREE.MeshPhongMaterial({color : 0xff0000}) );
 
-        return (mesh);
+        this.cd = new THREE.Object3D();
+        this.cd.position.x = -15;
+        this.cd.position.y = 12;
+        this.cd.add(this.mesh);
+
+        this.e = new THREE.Object3D();
+        this.e.add(this.cd);
+        
+        return (this.e);
     }
 
     
     update () {
-      this.position.set(-20,10,0);
+      this.e.rotation.z += 0.01;
+      this.cd.rotation.z -= 0.01;
+      this.mesh.rotation.y += 0.01;
     }
   }

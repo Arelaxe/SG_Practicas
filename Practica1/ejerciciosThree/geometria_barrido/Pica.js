@@ -48,15 +48,25 @@ class Pica extends THREE.Object3D {
 
         var base = new THREE.Mesh(latGeom, new THREE.MeshPhongMaterial({color : 0x0000ff}));
 
-        var group = new THREE.Group();
-        group.add(mesh);
-        group.add(base);
+        this.group = new THREE.Object3D();
+        this.group.add(mesh);
+        this.group.add(base);
+
+        this.cd = new THREE.Object3D();
+        this.cd.position.x = 15;
+        this.cd.position.y = 15;
+        this.cd.add(this.group);
+
+        this.e = new THREE.Object3D();
+        this.e.add(this.cd);
       
-        return (group);
+        return (this.e);
     }
 
     
     update () {
-        this.position.set(20,20,0);
+        this.e.rotation.z += 0.01;
+        this.cd.rotation.z -= 0.01;
+        this.group.rotation.y += 0.01;
     }
   }

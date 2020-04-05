@@ -36,12 +36,14 @@ class MyScene extends THREE.Scene {
       this.model2 = new Diamante();
       this.model3 = new Pica();
       this.model4 = new Trebol();
-      this.model5 = new CorazonArrastre() ;
+      this.model5 = new CorazonArrastre();
+      this.model6 = new TrebolBarrido();
       this.add (this.model);
       this.add (this.model2);
       this.add (this.model3);
       this.add (this.model4);
       this.add (this.model5);
+      this.add (this.model6);
     }
     
     createCamera () {
@@ -51,7 +53,7 @@ class MyScene extends THREE.Scene {
       //   Los planos de recorte cercano y lejano
       this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
       // También se indica dónde se coloca
-      this.camera.position.set (0, 0, 100);
+      this.camera.position.set (0, 0, 150);
       // Y hacia dónde mira
       var look = new THREE.Vector3 (0,0,0);
       this.camera.lookAt(look);
@@ -78,6 +80,7 @@ class MyScene extends THREE.Scene {
         // En el contexto de una función   this   alude a la función
         this.lightIntensity = 0.5;
         this.axisOnOff = true;
+        this.animOnOff = false;
       }
   
       // Se crea una sección para los controles de esta clase
@@ -88,6 +91,9 @@ class MyScene extends THREE.Scene {
       
       // Y otro para mostrar u ocultar los ejes
       folder.add (this.guiControls, 'axisOnOff').name ('Mostrar ejes : ');
+
+      var folder_2 = gui.addFolder ('Activar Animación');
+      folder_2.add (this.guiControls, 'animOnOff').name ('Activar animación: ');
       
       return gui;
     }
@@ -169,10 +175,14 @@ class MyScene extends THREE.Scene {
       this.cameraControl.update();
       
       // Se actualiza el resto del modelo
-      this.model.update();
-      this.model2.update();
-      this.model3.update();
-      this.model4.update();
+      if(this.guiControls.animOnOff){
+        this.model.update();
+        this.model2.update();
+        this.model3.update();
+        this.model4.update();
+        this.model5.update();
+        this.model6.update();
+      }
       
       // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
       this.renderer.render (this, this.getCamera());

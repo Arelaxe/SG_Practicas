@@ -46,18 +46,24 @@ class CorazonArrastre extends THREE.Object3D {
       contorno.bezierCurveTo(1,3,0.5,1,0,0);
 
       var camino = this.createCamino() ;
-      var extrudeSettings = { amount: 50, curveSegments: 4 , steps: 50, extrudePath: camino};
+      var extrudeSettings = { amount: 50, curveSegments: 50 , steps: 50, extrudePath: camino};
       var geometry = new THREE.ExtrudeBufferGeometry( contorno, extrudeSettings );
 
-      geometry.translate(60,-20,0);
+      geometry.translate(0,-35,0);
 
-      var mesh = new THREE.Mesh( geometry, new THREE.MeshPhongMaterial({color : 0x00ff00}) );
+      this.mesh = new THREE.Mesh( geometry, new THREE.MeshPhongMaterial({color : 0x00ff00}) );
 
-      return (mesh);
+      this.hijo1 = new THREE.Object3D();
+      this.hijo1.position.x = 60;
+      this.hijo1.position.y = -1.5;
+      this.hijo1.add(this.mesh);
+
+      return (this.hijo1);
     }
 
     
     update () {
-      this.position.set(20,-20,0);
+      this.mesh.rotation.y += 0.005;
+      this.mesh.rotation.x += 0.005;
     }
   }
