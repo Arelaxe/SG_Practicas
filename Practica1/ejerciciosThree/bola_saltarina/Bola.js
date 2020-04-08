@@ -7,7 +7,7 @@ class Bola extends THREE.Object3D{
         this.cilindro = this.createCilindro();
         this.add(this.bola);
         this.add(this.cilindro);
-        this.tope = true ;
+        this.animar();
     }
 
     createGUI (gui,titleGui) {
@@ -16,26 +16,13 @@ class Bola extends THREE.Object3D{
   
         this.guiControls = new function () {
           this.radius = 5.0 ;
-          this.bouncespeed = 0.4 ;
-          this.turnspeed = 0.1 ;
-          
-          this.reset = function () {
-            this.radius = 5.0 ;
-            this.bouncespeed = 0.4 ;
-            this.turnspeed = 0.1 ;
-  
-            that.remove(that.cilindro) ;
-          }
-        } 
+        }
 
         var folder = gui.addFolder (titleGui)
         folder.add (this.guiControls, 'radius', 1, 20, 1).name ('Radio : ').listen()
         .onChange(function(){
           that.modifyCilindro() ;
         }) ;
-        var subfolder = gui.addFolder('Velocidad de animación:');
-        subfolder.add(this.guiControls,'bouncespeed',0,5,0.1).name('Vel. salto:').listen();
-        subfolder.add(this.guiControls,'turnspeed',-2,2,0.1).name('Vel. giro:').listen();
     }
 
     createCilindro(){
@@ -67,15 +54,38 @@ class Bola extends THREE.Object3D{
         return satelite;
     }
 
+    animar(){
+      var that=this;
+      //Origenes y destinos
+      var origenrot = {rotacion:0};
+      var destrot = {rotacion:2*Math.PI};
+      var origenarriba = {altura:0};
+      var destinoarriba = {altura:that.cilindro.children[0].geometry.parameters.height};
+      var origenabajo = {altura:that.cilindro.children[0].geometry.parameters.height};
+      var destinoabajo = {altura:0};
 
+      //Animaciones: giro y salto (arriba-abajo)
+      this.animaciongiro = new TWEEN.Tween(origenrot).to(destrot,4000)
+      .onUpdate(function(){
+        that.rotation.y = origenrot.rotacion;
+        that.cilindro.position.y = that.cilindro.children[0].geometry.parameters.height - 10;  
+        that.bola.position.x = that.guiControls.radius ;
+      }).repeat(Infinity).start();
 
-    update(){
-        this.bola.position.x = this.guiControls.radius;
-        this.cilindro.position.y = 10;
-        this.rotation.y += this.guiControls.turnspeed;
-        if (this.bola.position.y >= 20) this.tope = false ;
-        if (this.bola.position.y <= 0) this.tope = true ;
-        if (this.tope) this.bola.position.y += this.guiControls.bouncespeed;
-        else this.bola.position.y -= this.guiControls.bouncespeed;
+      this.animacionarriba = new TWEEN.Tween(origenarriba).to(destinoarriba,500)
+      .onUpdate(function(){
+        that.bola.position.y = origenarriba.altura;
+      })
+      this.animacionabajo = new TWEEN.Tween(origenabajo).to(destinoabajo,500)
+      .onUpdate(function(){
+        that.bola.position.y = origenabajo.altura;
+      })
+
+      this.animacionarriba.chain(this.animacionabajo);
+      this.animacionabajo.chain(this.animacionarriba);
+      this.animacionarriba.start();
+
     }
+
+    update(){}
 }
