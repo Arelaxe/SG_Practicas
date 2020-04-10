@@ -1,6 +1,9 @@
 class Elipse extends THREE.Object3D{
     constructor(gui, titleGui){
         super();
+        this.rad_pista = 5;
+        this.rad_bola = 2;
+
         this.createGUI(gui,titleGui);
         this.curva = this.createCurva();
         this.pista = this.createPista();
@@ -43,17 +46,17 @@ class Elipse extends THREE.Object3D{
     }
 
     modifyRotacion(){
-        var cylGeom = new THREE.CylinderGeometry (5,5,5,30);
+        var cylGeom = new THREE.CylinderGeometry (this.rad_pista,this.rad_pista,5,30);
         cylGeom.scale(this.guiControls.escala,1,1);
         cylGeom.translate(0,2.5,0);
         this.cilindro.children[0].geometry = cylGeom ;
         
         var curve = new THREE.CatmullRomCurve3(
             [
-                new THREE.Vector3(-5*this.guiControls.escala,0,0),
-                new THREE.Vector3(0,0,-5),
-                new THREE.Vector3(5*this.guiControls.escala,0,0),
-                new THREE.Vector3(0,0,5)
+                new THREE.Vector3(-this.rad_pista*this.guiControls.escala,0,0),
+                new THREE.Vector3(0,0,-this.rad_pista),
+                new THREE.Vector3(this.rad_pista*this.guiControls.escala,0,0),
+                new THREE.Vector3(0,0,this.rad_pista)
             ],true,'catmullrom',0.8
         );
 
@@ -75,10 +78,10 @@ class Elipse extends THREE.Object3D{
     createCurva(){
         var curva = new THREE.CatmullRomCurve3(
             [
-                new THREE.Vector3(-5,0,0),
-                new THREE.Vector3(0,0,-5),
-                new THREE.Vector3(5,0,0),
-                new THREE.Vector3(0,0,5)
+                new THREE.Vector3(-this.rad_pista,0,0),
+                new THREE.Vector3(0,0,-this.rad_pista),
+                new THREE.Vector3(this.rad_pista,0,0),
+                new THREE.Vector3(0,0,this.rad_pista)
             ],true,'catmullrom',0.8
         );
 
@@ -86,7 +89,7 @@ class Elipse extends THREE.Object3D{
     }
 
     createCilindro(){
-        var cylGeom = new THREE.CylinderGeometry (5,5,5,30);
+        var cylGeom = new THREE.CylinderGeometry (this.rad_pista,this.rad_pista,5,30);
         var cylMat = new THREE.MeshNormalMaterial({opacity:0.35, transparent:true});
         
         cylGeom.translate(0,2.5,0);
@@ -100,8 +103,7 @@ class Elipse extends THREE.Object3D{
     }
 
     createBola(){
-        var satGeom = new THREE.SphereGeometry(2,20,20);
-        this.rad_bola = 2;
+        var satGeom = new THREE.SphereGeometry(this.rad_bola,20,20);
         var satMat = new THREE.MeshNormalMaterial();
         satGeom.translate(0,1.5,0);
         var satelite = new THREE.Mesh(satGeom,satMat);
