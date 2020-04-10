@@ -26,13 +26,10 @@ class MyScene extends THREE.Scene {
       // Por último creamos el modelo.
       // El modelo puede incluir su parte de la interfaz gráfica de usuario. Le pasamos la referencia a 
       // la gui y el texto bajo el que se agruparán los controles de la interfaz que añada el modelo.
-      
-      this.model2 = new Cilindro(this.gui,'Cilindro de rotación: ');
-      this.model = new Bola(this.model2);
+      this.model = new Elipse();
       this.suelo = this.createSuelo();
       this.suelo.position.y -= 0.7;
       this.add (this.model);
-      this.add (this.model2);
       this.add(this.suelo);
     }
     
@@ -166,9 +163,7 @@ class MyScene extends THREE.Scene {
       // Se actualiza la posición de la cámara según su controlador
       this.cameraControl.update();
 
-      
-      // Se actualiza el resto del modelo
-       this.model.update(this.getCamera());
+      TWEEN.update();
       
       // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
       this.renderer.render (this, this.getCamera());
