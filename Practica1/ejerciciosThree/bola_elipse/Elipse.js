@@ -1,58 +1,74 @@
 class Elipse extends THREE.Object3D{
-    constructor(){
+    constructor(gui, titleGui){
         super();
+        this.createGUI(gui,titleGui);
         this.curva = this.createCurva();
         this.pista = this.createPista();
         this.bola = this.createBola();
+        this.cilindro = this.createCilindro();
         this.add(this.pista);
         this.add(this.bola);
+        this.add(this.cilindro);
         var that = this;
         //Movimiento por Tween
-        var origenizq = {recorrido : 0};
-        var destinoizq = {recorrido : 0.35};
-        var origender = {recorrido : 0.35};
-        var destinoder = {recorrido : 1};
+        var origen = {recorrido : 0};
+        var destino = {recorrido : 1};
 
-        this.animacion1 = new TWEEN.Tween(origenizq).to(destinoizq,4000);
-        this.animacion2 = new TWEEN.Tween(origender).to(destinoder,8000);
-        this.animacion1.easing(TWEEN.Easing.Quadratic.InOut);
-        this.animacion2.easing(TWEEN.Easing.Cubic.InOut);
+        this.animacion1 = new TWEEN.Tween(origen).to(destino,4000);
         this.animacion1.onUpdate(function(){
-            that.curva.points[0].x -= 0.01;
-            that.curva.points[2].x += 0.01;
             that.pista.geometry = new THREE.BufferGeometry().setFromPoints(that.curva.getPoints(1000));
-            var posicion = that.curva.getPointAt(origenizq.recorrido);
+            var posicion = that.curva.getPointAt(origen.recorrido);
             that.bola.position.copy(posicion);
-            var tangente = that.curva.getTangentAt(origenizq.recorrido);
+            var tangente = that.curva.getTangentAt(origen.recorrido);
             posicion.add(tangente);
             that.bola.lookAt(posicion);
         });
-        this.animacion2.onUpdate(function(){
-            that.curva.points[0].x -= 0.01;
-            that.curva.points[2].x += 0.01;
-            that.pista.geometry = new THREE.BufferGeometry().setFromPoints(that.curva.getPoints(1000));
-            var posicion = that.curva.getPointAt(origender.recorrido);
-            that.bola.position.copy(posicion);
-            var tangente = that.curva.getTangentAt(origender.recorrido);
-            posicion.add(tangente);
-            that.bola.lookAt(posicion);
-        });
-        this.animacion1.chain(this.animacion2);
-        this.animacion2.chain(this.animacion1);
         this.animacion1.start();
+        this.animacion1.repeat(Infinity);
     }
+
+    createGUI(gui,titleGui){
+        var that = this ;
+  
+        this.guiControls = new function () {
+          this.escala = 1.0 ;
+          
+        } 
+
+        var folder = gui.addFolder (titleGui)
+        folder.add (this.guiControls, 'escala', 1, 5, 1).name ('Extensión : ').listen()
+        .onChange(function(){
+          that.modifyRotacion() ;
+        }) ;
+    }
+
+    modifyRotacion(){
+        var cylGeom = new THREE.CylinderGeometry (5,5,5,30);
+        cylGeom.scale(this.guiControls.escala,1,1);
+        cylGeom.translate(0,2.5,0);
+        this.cilindro.children[0].geometry = cylGeom ;
+        
+        var curve = new THREE.CatmullRomCurve3(
+            [
+                new THREE.Vector3(-5*this.guiControls.escala,0,0),
+                new THREE.Vector3(0,0,-5),
+                new THREE.Vector3(5*this.guiControls.escala,0,0),
+                new THREE.Vector3(0,0,5)
+            ],true,'catmullrom',0.8
+        );
+
+        this.curva = curve;
+      }
 
     createPista(){
         var curva = this.createCurva();
         var points = curva.getPoints( 1000 );
-        var figura = new THREE.Shape(points);
-        var extrudeSettings = {amount: 50, bevelEnabled: true, bevelSegments: 5, steps: 50, bevelSize: 1, bevelThickness: 1};
-        var geometry = new THREE.ExtrudeBufferGeometry( figura, extrudeSettings );
-        geometry.rotateZ(-Math.PI/2);
-        var material = new THREE.MeshNormalMaterial();
+        var geometry = new THREE.BufferGeometry().setFromPoints( points );
+
+        var material = new THREE.LineBasicMaterial( { color : 0xffffff, transparent:true, opacity:0 } );
  
         // Create the final object to add to the scene
-         var curveObject = new THREE.Object3D( geometry, material );
+         var curveObject = new THREE.Line( geometry, material );
          return curveObject;
     }   
 
@@ -60,12 +76,27 @@ class Elipse extends THREE.Object3D{
         var curva = new THREE.CatmullRomCurve3(
             [
                 new THREE.Vector3(-5,0,0),
-                new THREE.Vector3(0,-5,0),
+                new THREE.Vector3(0,0,-5),
                 new THREE.Vector3(5,0,0),
-                new THREE.Vector3(0,5,0)
+                new THREE.Vector3(0,0,5)
             ],true,'catmullrom',0.8
         );
+
         return curva;
+    }
+
+    createCilindro(){
+        var cylGeom = new THREE.CylinderGeometry (5,5,5,30);
+        var cylMat = new THREE.MeshNormalMaterial({opacity:0.35, transparent:true});
+        
+        cylGeom.translate(0,2.5,0);
+
+        var cylinder = new THREE.Mesh (cylGeom, cylMat);
+    
+        var cilindro = new THREE.Object3D();
+        cilindro.add(cylinder);
+    
+        return cilindro;
     }
 
     createBola(){
