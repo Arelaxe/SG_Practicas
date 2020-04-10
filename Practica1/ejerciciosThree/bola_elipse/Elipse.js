@@ -40,18 +40,19 @@ class Elipse extends THREE.Object3D{
         this.animacion1.chain(this.animacion2);
         this.animacion2.chain(this.animacion1);
         this.animacion1.start();
-
     }
 
     createPista(){
         var curva = this.createCurva();
         var points = curva.getPoints( 1000 );
-        var geometry = new THREE.BufferGeometry().setFromPoints( points );
-
-        var material = new THREE.LineBasicMaterial( { color : 0xff0000 } );
+        var figura = new THREE.Shape(points);
+        var extrudeSettings = {amount: 50, bevelEnabled: true, bevelSegments: 5, steps: 50, bevelSize: 1, bevelThickness: 1};
+        var geometry = new THREE.ExtrudeBufferGeometry( figura, extrudeSettings );
+        geometry.rotateZ(-Math.PI/2);
+        var material = new THREE.MeshNormalMaterial();
  
         // Create the final object to add to the scene
-         var curveObject = new THREE.Line( geometry, material );
+         var curveObject = new THREE.Object3D( geometry, material );
          return curveObject;
     }   
 
@@ -59,22 +60,12 @@ class Elipse extends THREE.Object3D{
         var curva = new THREE.CatmullRomCurve3(
             [
                 new THREE.Vector3(-5,0,0),
-                new THREE.Vector3(0,0,-5),
+                new THREE.Vector3(0,-5,0),
                 new THREE.Vector3(5,0,0),
-                new THREE.Vector3(0,0,5)
+                new THREE.Vector3(0,5,0)
             ],true,'catmullrom',0.8
         );
-
-
-        var camino = new THREE.CatmullRomCurve3([new THREE.Vector3(0,0,0),new THREE.Vector3(0,5,0)]);
-
-        var extrudeSettings = { amount: 50, curveSegments: 50 , steps: 50, extrudePath: camino };
-
-        var geometry = new THREE.ExtrudeBufferGeometry( curva, extrudeSettings );
-
-        this.mesh = new THREE.Mesh( geometry, new THREE.MeshPhongMaterial({color : 0xff0000}) );
-
-        return this.mesh;
+        return curva;
     }
 
     createBola(){
