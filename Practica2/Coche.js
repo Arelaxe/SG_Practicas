@@ -6,10 +6,10 @@ class Coche extends THREE.Object3D{
         var materialLoader = new THREE.MTLLoader();
         var objectLoader = new THREE.OBJLoader();
 
-        materialLoader.load('models/low_poly_cars_set/Low_Poly_City_Cars.mtl',
+        materialLoader.load('models/coche/coche.mtl',
             function(material){
                 objectLoader.setMaterials(material);
-                objectLoader.load('models/low_poly_cars_set/Low_Poly_City_Cars.obj',
+                objectLoader.load('models/coche/coche.obj',
                 function(objeto){
                     var modelo = objeto ;
                     that.add(modelo);
