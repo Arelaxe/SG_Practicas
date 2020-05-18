@@ -39,7 +39,7 @@ class MyScene extends THREE.Scene {
       //this.model.scale.x = 0.25;
       //this.model.scale.y = 0.25;
       //this.model.scale.z = 0.25;
-      this.model2 = new LineaCarretera();
+      this.model2 = new LineaCesped();
       this.model3 = new Personaje();
       //this.add (this.model);
       this.add (this.model2);
