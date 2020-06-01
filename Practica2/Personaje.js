@@ -31,4 +31,38 @@ constructor(){
             });
         });
 }
+
+saltar(reloj,distancia,tiempototal){
+    console.log(this.position);
+    var time = reloj.getDelta();
+    if(reloj.getElapsedTime() < tiempototal){
+        if (reloj.getElapsedTime() < tiempototal/2) {
+            this.position.y += distancia * time/tiempototal/2;
+            this.position.z += distancia * time/tiempototal/2;
+        } else {
+            this.position.y -= distancia * time/tiempototal/2;
+            this.position.z += distancia * time/tiempototal/2;
+        }
+    }
+}
+
+aplastarY(reloj,tiempototal){
+    var time = reloj.getDelta()  ;
+    if(reloj.getElapsedTime()<tiempototal){
+        this.scale.y = this.scale.y - time/tiempototal ;
+        this.position.y -= 2*time/tiempototal; 
+    }
+}
+
+aplastarZ(reloj,tiempototal){
+    var time = reloj.getDelta()  ;
+    if(reloj.getElapsedTime()<tiempototal){
+        this.scale.z = this.scale.z - time/tiempototal ;
+    }
+}
+
+update(reloj){
+    this.saltar(reloj,5,0.5);
+    if (reloj.getElapsedTime() >= 0.5){reloj.stop(); reloj.start();}
+}
 }
