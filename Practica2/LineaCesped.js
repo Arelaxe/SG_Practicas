@@ -1,18 +1,18 @@
 class LineaCesped extends THREE.Object3D {
-    constructor() {
+    constructor(num_linea) {
       super();
   
-      this.linea = this.createLinea();
+      this.linea = this.createLinea(num_linea);
 
       this.add(this.linea);
     }
 
     
-    createLinea(){
+    createLinea(num_linea){
         var linea = new THREE.Group();
 
         for (var i=0; i<10; i++){
-          var casilla = new CasillaCesped(0,0,i*5);
+          var casilla = new CasillaCesped(num_linea*5,0,i*5);
         
           linea.add(casilla);
 
@@ -25,6 +25,7 @@ class LineaCesped extends THREE.Object3D {
               arbol.scale.z = 1.5;
               arbol.position.y = 2.75;
               arbol.position.z = i*5;
+              arbol.position.x = 5*num_linea;
               this.add(arbol);
           }
 
@@ -35,6 +36,7 @@ class LineaCesped extends THREE.Object3D {
               rock.scale.z = 1.75;
               rock.position.y = 1;
               rock.position.z = i*5;
+              rock.position.x = 5*num_linea;
               this.add(rock);
           }
             

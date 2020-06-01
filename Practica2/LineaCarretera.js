@@ -1,8 +1,8 @@
  class LineaCarretera extends THREE.Object3D {
-    constructor() {
+    constructor(num_linea) {
       super();
   
-      this.linea = this.createLinea();
+      this.linea = this.createLinea(num_linea);
 
       this.add(this.linea);
 
@@ -10,11 +10,12 @@
       this.velocidad = 1.5;    
     }
     
-    createLinea(){
+    createLinea(num_linea){
         var linea = new THREE.Group();
+        this.num_linea = num_linea;
 
         for (var i=0; i<10; i++){
-          var casilla = new CasillaCarretera(0,0,i*5);
+          var casilla = new CasillaCarretera(num_linea*5,0,i*5);
         
           linea.add(casilla);
         }
@@ -30,6 +31,7 @@
         this.coche.scale.y = 0.1;
         this.coche.scale.z = 0.1;
         this.coche.position.y = 1;
+        this.coche.position.x = this.num_linea*5;
         this.coche.position.z = 45;
         this.coche.rotation.y += Math.PI/2;
         this.add(this.coche);
