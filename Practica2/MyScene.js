@@ -39,7 +39,7 @@ class MyScene extends THREE.Scene {
       //this.model.scale.x = 0.25;
       //this.model.scale.y = 0.25;
       //this.model.scale.z = 0.25;
-      this.model2 = new LineaCesped();
+      this.model2 = new GeneraEscenario(10);
       this.model3 = new Personaje();
       //this.add (this.model);
       this.add (this.model2);
@@ -101,7 +101,7 @@ class MyScene extends THREE.Scene {
       // En este caso la intensidad de la luz y si se muestran o no los ejes
       this.guiControls = new function() {
         // En el contexto de una función   this   alude a la función
-        this.lightIntensity = 0.5;
+        this.lightIntensity = 0.8;
         this.axisOnOff = true;
       }
   
@@ -131,7 +131,7 @@ class MyScene extends THREE.Scene {
       // Si no se le da punto de mira, apuntará al (0,0,0) en coordenadas del mundo
       // En este caso se declara como   this.atributo   para que sea un atributo accesible desde otros métodos.
       this.spotLight = new THREE.SpotLight( 0xffffff, this.guiControls.lightIntensity );
-      this.spotLight.position.set( 60, 60, 40 );
+      this.spotLight.position.set( 90, 60, 60 );
       this.add (this.spotLight);
     }
     
