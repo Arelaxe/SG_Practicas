@@ -12,10 +12,18 @@ constructor(){
             objectLoader.load('models/chicken/chicken.obj',
             function(objeto){
                 var modelo = objeto ;
-                that.add(modelo);
                 objeto.children[0].material.map.anisotropy = 16 ;
                 objeto.children[0].material.map.minFilter = THREE.LinearFilter;
-                console.log(objeto.children[0].geometry);
+                //Collider
+                var bounding = new THREE.BoxHelper(modelo);
+                bounding.geometry.computeBoundingBox();
+                var bb = bounding.geometry.boundingBox;
+                var geomCollider = new THREE.BoxGeometry(bb.max.x-bb.min.x,bb.max.y-bb.min.y,bb.max.z-bb.min.z);
+                geomCollider.translate(0,0,-0.5);
+                var matCollider = new THREE.MeshPhongMaterial({color:0xabc, transparent:true, opacity:0.5});
+                var collider = new THREE.Mesh(geomCollider,matCollider);
+                collider.add(modelo);
+                that.add(collider);
             },
             // called when loading is in progresses
             function ( xhr ) {
@@ -29,7 +37,7 @@ constructor(){
                 console.log( 'An error happened' );
         
             });
-        });
+        });  
 }
 
 saltar(reloj,distancia,tiempototal){

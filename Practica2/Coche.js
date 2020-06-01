@@ -12,7 +12,16 @@ class Coche extends THREE.Object3D{
                 objectLoader.load('models/coche/coche.obj',
                 function(objeto){
                     var modelo = objeto ;
-                    that.add(modelo);
+                    //Collider
+                    var bounding = new THREE.BoxHelper(modelo);
+                    bounding.geometry.computeBoundingBox();
+                    var bb = bounding.geometry.boundingBox;
+                    var geomCollider = new THREE.BoxGeometry(bb.max.x-bb.min.x,bb.max.y-bb.min.y,bb.max.z-bb.min.z);
+                    geomCollider.translate(12.5,10,2);
+                    var matCollider = new THREE.MeshPhongMaterial({color:0xbb0000, transparent:true, opacity:0.5});
+                    var collider = new THREE.Mesh(geomCollider,matCollider);
+                    collider.add(modelo);
+                    that.add(collider);
                 },
                 // called when loading is iporsche911n progresses
                 function ( xhr ) {
@@ -27,7 +36,6 @@ class Coche extends THREE.Object3D{
             
                 });
             });
-            console.log(this);
     }
 
     update(){
