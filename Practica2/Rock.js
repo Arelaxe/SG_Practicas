@@ -6,7 +6,7 @@ class Rock extends THREE.Object3D{
         var materialLoader = new THREE.MTLLoader();
         var objectLoader = new THREE.OBJLoader();
 
-        materialLoader.load('models/rock/rock.mtl',
+        materialLoader.load('models/rock/Stone.png',
             function(material){
                 objectLoader.setMaterials(material);
                 objectLoader.load('models/rock/rock.obj',
