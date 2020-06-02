@@ -47,6 +47,8 @@ class MyScene extends THREE.Scene {
 
       this.model3.position.y = 2.20;
       this.estado = MyScene.IDLE ;
+      this.direccion = MyScene.IDLE ;
+      this.dead = false ;
 
       this.tiempo = Date.now();
     }
@@ -200,6 +202,7 @@ class MyScene extends THREE.Scene {
       //this.model.update();
       this.model2.update();
       this.saltar();
+      this.aplastar();
       
       // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
       this.renderer.render (this, this.getCamera());
@@ -207,11 +210,24 @@ class MyScene extends THREE.Scene {
     }
 
     onKeyPressed () {
-      if(this.estado != MyScene.WAIT){
-      var tecla = event.which || event.keyCode() ;
+      if(this.estado != MyScene.WAIT && this.estado != MyScene.DEAD){
+      var tecla = event.which || event.keyCode ;
       var letra = String.fromCharCode(tecla);
-      if(letra == "w" || letra == "W"){
+      if(tecla == 38 || letra.toUpperCase() == "W"){
+        console.log("Arriba");
         this.estado = MyScene.JUMP ;
+        this.direccion = MyScene.UP ;
+      }
+      if(tecla == 37 || letra.toUpperCase() == "A"){
+        this.estado = MyScene.JUMP ;
+        this.direccion = MyScene.LEFT ;
+      }
+      if(tecla == 39 || letra.toUpperCase() == "D"){
+        this.estado = MyScene.JUMP ;
+        this.direccion = MyScene.RIGHT ;
+      }
+      if(tecla == 40 || letra.toUpperCase() == "S"){
+        this.estado = MyScene.DEATH ;
       }
     }
     }
@@ -223,25 +239,74 @@ class MyScene extends THREE.Scene {
       if(this.estado == MyScene.JUMP){
           this.tiempo = Date.now();
           this.estado = MyScene.WAIT ;
+          if (this.direccion == MyScene.UP)
+            this.model3.rotation.y = Math.PI/2;
+          if (this.direccion == MyScene.LEFT)
+            this.model3.rotation.y = Math.PI;
+          if (this.direccion == MyScene.RIGHT)
+            this.model3.rotation.y = 0;
        }
 
-      if(this.estado == MyScene.WAIT){
+      if(this.estado == MyScene.WAIT && this.direccion != MyScene.IDLE){
         var time = Date.now();
         var elapsed = time-this.tiempo ;
         if(elapsed < tiempototal){
+          if(this.direccion == MyScene.UP){
             if (elapsed < tiempototal/2) {
                 this.model3.position.y += elapsed/tiempototal;
-                this.model3.position.z += velocidad * elapsed/tiempototal;
+                this.model3.position.x += velocidad * elapsed/tiempototal;
             } else {
                 this.model3.position.y -= elapsed/tiempototal;
-                this.model3.position.z += velocidad * elapsed/tiempototal;
+                this.model3.position.x += velocidad * elapsed/tiempototal;
             }
+          }
+          if(this.direccion == MyScene.LEFT){
+            if (elapsed < tiempototal/2) {
+              this.model3.position.y += elapsed/tiempototal;
+              this.model3.position.z -= velocidad * elapsed/tiempototal;
+          } else {
+              this.model3.position.y -= elapsed/tiempototal;
+              this.model3.position.z -= velocidad * elapsed/tiempototal;
+          }
+          }
+          if(this.direccion == MyScene.RIGHT){
+            if (elapsed < tiempototal/2) {
+              this.model3.position.y += elapsed/tiempototal;
+              this.model3.position.z += velocidad * elapsed/tiempototal;
+          } else {
+              this.model3.position.y -= elapsed/tiempototal;
+              this.model3.position.z += velocidad * elapsed/tiempototal;
+          }
+          }
         }
         else{
             this.model3.position.y = 2.2 ;
             this.estado = MyScene.IDLE ;
+            this.direccion = MyScene.IDLE;
         }
       }
+  }
+
+  aplastar(){
+    var escala = 1 ;
+    var tiempototal = 200 ;
+    var velocidad = escala/tiempototal ;
+    if(this.estado ==  MyScene.DEATH){
+      this.tiempo = Date.now();
+      this.estado = MyScene.WAIT ;
+      this.dead = true ;
+    }
+    if(this.estado == MyScene.WAIT && this.dead){
+      var time = Date.now();
+      var elapsed = time-this.tiempo ;
+      if (elapsed < tiempototal)
+        this.model3.scale.y = velocidad * elapsed/tiempototal ;
+      else {
+        this.estado = MyScene.DEAD;
+        this.model3.position.y = 0.3 ;
+        alert("GameOver");
+      } 
+    }
   }
 }
 
@@ -249,6 +314,13 @@ class MyScene extends THREE.Scene {
   MyScene.WAIT = -1;
   MyScene.IDLE = 0 ;
   MyScene.JUMP = 1;
+  MyScene.DEATH = 2 ;
+  MyScene.DEAD = 3 ;
+
+  //Direcciones (Comparto Idle por ser Nulo)
+  MyScene.LEFT = 4 ;
+  MyScene.RIGHT = 6 ;
+  MyScene.UP = 8 ;
   
   /// La función   main
   $(function () {
