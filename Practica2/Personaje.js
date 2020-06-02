@@ -37,22 +37,30 @@ constructor(){
                 console.log( 'An error happened' );
         
             });
-        });  
+        }); 
+        
+        this.anterior = Date.now() ;
 }
 
-saltar(reloj,distancia,tiempototal){
+/*saltar(distancia,tiempototal){
+    this.anterior = Date.now() ;
     console.log(this.position);
-    var time = reloj.getDelta();
-    if(reloj.getElapsedTime() < tiempototal){
-        if (reloj.getElapsedTime() < tiempototal/2) {
-            this.position.y += distancia * time/tiempototal/2;
-            this.position.z += distancia * time/tiempototal/2;
+
+    var time = Date.now();
+    var elapsed = time-ant ;
+    if(elapsed < tiempototal){
+        if (elapsed < tiempototal/2) {
+            this.position.y += elapsed/tiempototal;
+            this.position.z += distancia * elapsed/tiempototal;
         } else {
-            this.position.y -= distancia * time/tiempototal/2;
-            this.position.z += distancia * time/tiempototal/2;
+            this.position.y -= elapsed/tiempototal;
+            this.position.z += distancia * elapsed/tiempototal;
         }
     }
-}
+    else{
+        this.position.y = 2.2 ;
+    }
+}*/
 
 aplastarY(reloj,tiempototal){
     var time = reloj.getDelta()  ;
@@ -69,8 +77,9 @@ aplastarZ(reloj,tiempototal){
     }
 }
 
-update(reloj){
-    this.saltar(reloj,5,0.5);
-    if (reloj.getElapsedTime() >= 0.5){reloj.stop(); reloj.start();}
+update(estado, distancia, tiempo){
+    if (estado == MyScene.JUMP){
+        this.saltar(distancia,tiempo) ; 
+    }
 }
 }

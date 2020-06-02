@@ -46,6 +46,9 @@ class MyScene extends THREE.Scene {
       this.add (this.model3);
 
       this.model3.position.y = 2.20;
+      this.estado = MyScene.IDLE ;
+
+      this.tiempo = Date.now();
     }
     
     createCamera () {
@@ -196,11 +199,56 @@ class MyScene extends THREE.Scene {
       // Se actualiza el resto del modelo
       //this.model.update();
       this.model2.update();
+      this.saltar();
       
       // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
       this.renderer.render (this, this.getCamera());
+      console.log(this.estado);
     }
+
+    onKeyPressed () {
+      if(this.estado != MyScene.WAIT){
+      var tecla = event.which || event.keyCode() ;
+      var letra = String.fromCharCode(tecla);
+      if(letra == "w" || letra == "W"){
+        this.estado = MyScene.JUMP ;
+      }
+    }
+    }
+
+    saltar(){
+      var distancia = 175 ;
+      var tiempototal = 250 ;
+      var velocidad = distancia/tiempototal ;
+      if(this.estado == MyScene.JUMP){
+          this.tiempo = Date.now();
+          this.estado = MyScene.WAIT ;
+       }
+
+      if(this.estado == MyScene.WAIT){
+        var time = Date.now();
+        var elapsed = time-this.tiempo ;
+        if(elapsed < tiempototal){
+            if (elapsed < tiempototal/2) {
+                this.model3.position.y += elapsed/tiempototal;
+                this.model3.position.z += velocidad * elapsed/tiempototal;
+            } else {
+                this.model3.position.y -= elapsed/tiempototal;
+                this.model3.position.z += velocidad * elapsed/tiempototal;
+            }
+        }
+        else{
+            this.model3.position.y = 2.2 ;
+            this.estado = MyScene.IDLE ;
+        }
+      }
   }
+}
+
+  //Estados
+  MyScene.WAIT = -1;
+  MyScene.IDLE = 0 ;
+  MyScene.JUMP = 1;
   
   /// La función   main
   $(function () {
@@ -210,6 +258,7 @@ class MyScene extends THREE.Scene {
   
     // Se añaden los listener de la aplicación. En este caso, el que va a comprobar cuándo se modifica el tamaño de la ventana de la aplicación.
     window.addEventListener ("resize", () => scene.onWindowResize());
+    window.addEventListener("keypress", () => scene.onKeyPressed());
     
     // Que no se nos olvide, la primera visualización.
     scene.update();

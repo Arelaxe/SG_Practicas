@@ -17,7 +17,7 @@ class Coche extends THREE.Object3D{
                     bounding.geometry.computeBoundingBox();
                     var bb = bounding.geometry.boundingBox;
                     var geomCollider = new THREE.BoxGeometry(bb.max.x-bb.min.x,bb.max.y-bb.min.y,bb.max.z-bb.min.z);
-                    geomCollider.translate(12.5,10,2);
+                    geomCollider.translate(12.5,10,-0.5);
                     var matCollider = new THREE.MeshPhongMaterial({color:0xbb0000, transparent:true, opacity:0.5});
                     var collider = new THREE.Mesh(geomCollider,matCollider);
                     collider.add(modelo);
