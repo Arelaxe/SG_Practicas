@@ -42,26 +42,6 @@ constructor(){
         this.anterior = Date.now() ;
 }
 
-/*saltar(distancia,tiempototal){
-    this.anterior = Date.now() ;
-    console.log(this.position);
-
-    var time = Date.now();
-    var elapsed = time-ant ;
-    if(elapsed < tiempototal){
-        if (elapsed < tiempototal/2) {
-            this.position.y += elapsed/tiempototal;
-            this.position.z += distancia * elapsed/tiempototal;
-        } else {
-            this.position.y -= elapsed/tiempototal;
-            this.position.z += distancia * elapsed/tiempototal;
-        }
-    }
-    else{
-        this.position.y = 2.2 ;
-    }
-}*/
-
 aplastarY(reloj,tiempototal){
     var time = reloj.getDelta()  ;
     if(reloj.getElapsedTime()<tiempototal){
@@ -74,12 +54,6 @@ aplastarZ(reloj,tiempototal){
     var time = reloj.getDelta()  ;
     if(reloj.getElapsedTime()<tiempototal){
         this.scale.z = this.scale.z - time/tiempototal ;
-    }
-}
-
-update(estado, distancia, tiempo){
-    if (estado == MyScene.JUMP){
-        this.saltar(distancia,tiempo) ; 
     }
 }
 }
