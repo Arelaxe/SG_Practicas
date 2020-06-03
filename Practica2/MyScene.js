@@ -39,11 +39,13 @@ class MyScene extends THREE.Scene {
       //this.model.scale.x = 0.25;
       //this.model.scale.y = 0.25;
       //this.model.scale.z = 0.25;
+      this.puntuacion = 0;
       this.model2 = new EscenarioDinamico(10);
       this.model3 = new Personaje();
       //this.add (this.model);
       this.add (this.model2);
       this.add (this.model3);
+      this.setMessage(this.puntuacion);
 
       this.model3.position.y = 2.20;
       this.estado = MyScene.IDLE ;
@@ -216,6 +218,8 @@ class MyScene extends THREE.Scene {
         console.log("Arriba");
         this.estado = MyScene.JUMP ;
         this.direccion = MyScene.UP ;
+        this.puntuacion++;
+        this.setMessage(this.puntuacion);
       }
       if(tecla == 37 || letra.toUpperCase() == "A"){
         this.estado = MyScene.JUMP ;
@@ -306,6 +310,9 @@ class MyScene extends THREE.Scene {
         alert("GameOver");
       } 
     }
+  }
+  setMessage (str) {
+    document.getElementById("msg").innerHTML = "Puntuación: "+str;
   }
 }
 
