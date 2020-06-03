@@ -35,19 +35,21 @@ class EscenarioDinamico extends THREE.Object3D {
             escenario.add(linea);
         }
 
-        this.tiempo_anterior = new Date ();
+        this.tiempo_borrar = new Date ();
+        this.tiempo_crear = new Date();
 
         return escenario;
     }
     
     update () {
-        
-
         var tiempo_actual = new Date ();
-        if ((tiempo_actual-this.tiempo_anterior) > 5000){
-            this.tiempo_anterior = new Date();
-            this.escenario.remove(this.escenario.children[0]);
-
+        if ((tiempo_actual-this.tiempo_borrar) > 6000){
+            this.tiempo_borrar = new Date();
+            this.escenario.remove(this.escenario.children[0]); 
+            this.num_lineas--;           
+        }
+        else if((tiempo_actual-this.tiempo_crear) > 2000) {
+            this.tiempo_crear = new Date();
             var tipo_linea = Math.random() * (3 - 0) + 0;
             var linea;
 
@@ -63,6 +65,7 @@ class EscenarioDinamico extends THREE.Object3D {
         
             this.num_linea_actual++;
             this.escenario.add(linea);
+            this.num_lineas++;
         }
         else{
             for (var i=0; i<this.num_lineas; i++){

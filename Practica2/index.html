@@ -32,6 +32,26 @@
             margin: 0;
             overflow: hidden; 
         }
+        #msg {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 100%;
+            text-align: left;
+            z-index: 100;
+            display:block;
+            color:black;
+        }
+        #gameover {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 100%;
+            text-align: center;
+            z-index: 100;
+            display:none;
+            color:black;
+        }
     </style>
 </head>
 <body>
@@ -39,5 +59,7 @@
 <!-- Div which will hold the Output -->
 <div id="WebGL-output">
 </div>
+<div id="msg"></div>
+<div id="gameover"></div>
 </body>
 </html>
