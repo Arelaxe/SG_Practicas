@@ -39,7 +39,7 @@ class MyScene extends THREE.Scene {
       //this.model.scale.x = 0.25;
       //this.model.scale.y = 0.25;
       //this.model.scale.z = 0.25;
-      this.model2 = new GeneraEscenario(10);
+      this.model2 = new EscenarioDinamico(10);
       this.model3 = new Personaje();
       //this.add (this.model);
       this.add (this.model2);
@@ -121,21 +121,8 @@ class MyScene extends THREE.Scene {
     }
     
     createLights () {
-      // Se crea una luz ambiental, evita que se vean complentamente negras las zonas donde no incide de manera directa una fuente de luz
-      // La luz ambiental solo tiene un color y una intensidad
-      // Se declara como   var   y va a ser una variable local a este método
-      //    se hace así puesto que no va a ser accedida desde otros métodos
-      var ambientLight = new THREE.AmbientLight(0xccddee, 0.35);
-      // La añadimos a la escena
-      this.add (ambientLight);
-      
-      // Se crea una luz focal que va a ser la luz principal de la escena
-      // La luz focal, además tiene una posición, y un punto de mira
-      // Si no se le da punto de mira, apuntará al (0,0,0) en coordenadas del mundo
-      // En este caso se declara como   this.atributo   para que sea un atributo accesible desde otros métodos.
-      this.spotLight = new THREE.SpotLight( 0xffffff, this.guiControls.lightIntensity );
-      this.spotLight.position.set( 90, 60, 60 );
-      this.add (this.spotLight);
+      var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.8 );
+      this.add( directionalLight );
     }
     
     createRenderer (myCanvas) {
@@ -188,7 +175,7 @@ class MyScene extends THREE.Scene {
   
       // Se actualizan los elementos de la escena para cada frame
       // Se actualiza la intensidad de la luz con lo que haya indicado el usuario en la gui
-      this.spotLight.intensity = this.guiControls.lightIntensity;
+      //this.spotLight.intensity = this.guiControls.lightIntensity;
       
       // Se muestran o no los ejes según lo que idique la GUI
       this.axis.visible = this.guiControls.axisOnOff;
