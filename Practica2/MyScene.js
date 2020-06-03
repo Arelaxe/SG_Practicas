@@ -60,11 +60,14 @@ class MyScene extends THREE.Scene {
       //   Los planos de recorte cercano y lejano
       this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
       // También se indica dónde se coloca
-      this.camera.position.set (20, 20, -20);
+      this.camera.position.set (-20, 40, 25);
       // Y hacia dónde mira
-      var look = new THREE.Vector3 (0,0,0);
+      var look = new THREE.Vector3 (0,0,25);
+      this.lookx = 0;
       this.camera.lookAt(look);
       this.add (this.camera);
+      console.log(this.camera);
+      this.tiempo_camara = Date.now();
       
       // Para el control de cámara usamos una clase que ya tiene implementado los movimientos de órbita
       this.cameraControl = new THREE.TrackballControls (this.camera, this.renderer.domElement);
@@ -169,11 +172,25 @@ class MyScene extends THREE.Scene {
     }
   
     update () {
-      // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
-      
       // Literalmente le decimos al navegador: "La próxima vez que haya que refrescar la pantalla, llama al método que te indico".
       // Si no existiera esta línea,  update()  se ejecutaría solo la primera vez.
       requestAnimationFrame(() => this.update())
+
+      // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
+      var tiempo_actual = Date.now();
+      var segs = (tiempo_actual-this.tiempo_camara)/1000;
+
+      this.lookx += segs*2.5;
+      var look = new THREE.Vector3 (this.lookx,0,25);
+      this.camera.lookAt(look);
+      this.cameraControl.target = look;
+      this.camera.position.x += segs*2.5;
+      // Se actualiza la posición de la cámara según su controlador
+      this.cameraControl.update();
+      this.tiempo_camara = tiempo_actual;
+
+      // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
+      this.renderer.render (this, this.getCamera());
   
       // Se actualizan los elementos de la escena para cada frame
       // Se actualiza la intensidad de la luz con lo que haya indicado el usuario en la gui
@@ -182,17 +199,12 @@ class MyScene extends THREE.Scene {
       // Se muestran o no los ejes según lo que idique la GUI
       this.axis.visible = this.guiControls.axisOnOff;
       
-      // Se actualiza la posición de la cámara según su controlador
-      this.cameraControl.update();
-      
       // Se actualiza el resto del modelo
       //this.model.update();
       this.model2.update();
       this.saltar();
       this.aplastar();
       
-      // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
-      this.renderer.render (this, this.getCamera());
       console.log(this.estado);
     }
 
