@@ -7,7 +7,7 @@ class GeneraEscenario extends THREE.Object3D {
 
       this.add(this.escenario);
     }
-
+//hey
     
     createEscenario(num_lineas){
         var escenario = new THREE.Group();

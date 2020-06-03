@@ -1,7 +1,7 @@
 class Coche extends THREE.Object3D{
     constructor(){
         super();
-
+//hey
         var that = this ;
         var materialLoader = new THREE.MTLLoader();
         var objectLoader = new THREE.OBJLoader();

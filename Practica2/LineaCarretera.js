@@ -39,7 +39,7 @@
 
         this.hay_coche = true; 
       } 
-
+//hey
       if(this.hay_coche){
         var tiempo_actual = Date.now();
 
