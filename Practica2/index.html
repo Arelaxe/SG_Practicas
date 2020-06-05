@@ -44,13 +44,26 @@
         }
         #gameover {
             position: absolute;
-            top: 10px;
+            top: 50%;
             left: 10px;
             width: 100%;
             text-align: center;
             z-index: 100;
             display:none;
-            color:black;
+            color:white;
+            background-color: black;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        #init {
+            position: absolute;
+            top: 50%;
+            left: 10px;
+            width: 100%;
+            text-align: center;
+            z-index: 100;
+            color:white;
+            background-color: black;
+            font-family: 'Courier New', Courier, monospace;
         }
     </style>
 </head>
@@ -59,7 +72,8 @@
 <!-- Div which will hold the Output -->
 <div id="WebGL-output">
 </div>
+<div id="init"><p>Don't Run Over Me</p><p>Pulsa espacio para comenzar la partida</p></div>
 <div id="msg"></div>
-<div id="gameover"></div>
+<div id="gameover"><p>Game Over</p><p>Pulsa espacio para jugar otra vez</p></div>
 </body>
 </html>

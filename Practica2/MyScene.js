@@ -50,6 +50,28 @@ class MyScene extends THREE.Scene {
       this.model3.position.y = 2.20;
       this.estado = MyScene.IDLE ;
       this.direccion = MyScene.IDLE ;
+      this.partida = MyScene.NOTSTARTED;
+      this.dead = false ;
+
+      this.tiempo = Date.now();
+    }
+
+    nuevaPartida(){
+      this.puntuacion = 0;
+      this.remove(this.model3);
+      this.remove(this.model2);
+      this.remove(this.camera);
+      this.model2 = new EscenarioDinamico(10);
+      this.model3 = new Personaje();
+      //this.add (this.model);
+      this.add (this.model2);
+      this.add (this.model3);
+      this.setMessage(this.puntuacion);
+      this.createCamera ();
+
+      this.model3.position.y = 2.20;
+      this.estado = MyScene.IDLE ;
+      this.direccion = MyScene.IDLE ;
       this.dead = false ;
 
       this.tiempo = Date.now();
@@ -211,9 +233,9 @@ class MyScene extends THREE.Scene {
     }
 
     onKeyPressed () {
-      if(this.estado != MyScene.WAIT && this.estado != MyScene.DEAD){
       var tecla = event.which || event.keyCode ;
       var letra = String.fromCharCode(tecla);
+      if(this.estado != MyScene.WAIT && this.estado != MyScene.DEAD && this.partida == MyScene.STARTED){
       if(tecla == 38 || letra.toUpperCase() == "W"){
         console.log("Arriba");
         this.estado = MyScene.JUMP ;
@@ -231,6 +253,16 @@ class MyScene extends THREE.Scene {
       }
       if(tecla == 40 || letra.toUpperCase() == "S"){
         this.estado = MyScene.DEATH ;
+        this.partida = MyScene.NOTSTARTED;
+        document.getElementById("gameover").style.display = "none";
+      }
+    }
+    else if (this.partida == MyScene.NOTSTARTED){
+      if(letra.toUpperCase() == " "){
+        this.partida = MyScene.STARTED;
+        document.getElementById("init").style.display = "none";
+        document.getElementById("gameover").style.display = "none";
+        this.nuevaPartida();
       }
     }
     }
@@ -307,7 +339,7 @@ class MyScene extends THREE.Scene {
       else {
         this.estado = MyScene.DEAD;
         this.model3.position.y = 0.3 ;
-        alert("GameOver");
+        document.getElementById("gameover").style.display = "block";
       } 
     }
   }
@@ -327,6 +359,10 @@ class MyScene extends THREE.Scene {
   MyScene.LEFT = 4 ;
   MyScene.RIGHT = 6 ;
   MyScene.UP = 8 ;
+
+  //Estado de la partida
+  MyScene.NOTSTARTED = 9;
+  MyScene.STARTED = 10;
   
   /// La función   main
   $(function () {
@@ -337,6 +373,7 @@ class MyScene extends THREE.Scene {
     // Se añaden los listener de la aplicación. En este caso, el que va a comprobar cuándo se modifica el tamaño de la ventana de la aplicación.
     window.addEventListener ("resize", () => scene.onWindowResize());
     window.addEventListener("keypress", () => scene.onKeyPressed());
+    window.addEventListener("keydown", () => scene.onKeyPressed());
     
     // Que no se nos olvide, la primera visualización.
     scene.update();
