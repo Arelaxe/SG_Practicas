@@ -3,6 +3,7 @@ class EscenarioDinamico extends THREE.Object3D {
       super();
   
       this.obstaculos = [];
+      this.trampas = [] ;
       this.escenario = this.createEscenario(num_lineas);
       this.num_lineas = num_lineas;
 
@@ -31,6 +32,14 @@ class EscenarioDinamico extends THREE.Object3D {
 
             if (tipo_linea >= 0 && tipo_linea < 1){
                 linea = new LineaAgua(i);
+                var obstaculo = linea.getObstaculos();
+                for(let o = 0 ; o < obstaculo.length ; o++){
+                    this.obstaculos.push(obstaculo[o]);
+                }
+                var trampa = linea.getTrampas();
+                for(let o = 0 ; o < trampa.length ; o++){
+                    this.trampas.push(trampa[o]);
+                }
             }
             else if (tipo_linea >= 1 && tipo_linea < 2){
                 linea = new LineaCesped(i);
@@ -38,12 +47,20 @@ class EscenarioDinamico extends THREE.Object3D {
                 for(let o = 0 ; o < obstaculo.length ; o++){
                     this.obstaculos.push(obstaculo[o]);
                 }
+                var trampa = linea.getTrampas();
+                for(let o = 0 ; o < trampa.length ; o++){
+                    this.trampas.push(trampa[o]);
+                }
             }
             else{
                 linea = new LineaCarretera(i);
                 var obstaculo = linea.getObstaculos();
                 for(let o = 0 ; o < obstaculo.length ; o++){
                     this.obstaculos.push(obstaculo[o]);
+                }
+                var trampa = linea.getTrampas();
+                for(let o = 0 ; o < trampa.length ; o++){
+                    this.trampas.push(trampa[o]);
                 }
             }
         
@@ -58,6 +75,10 @@ class EscenarioDinamico extends THREE.Object3D {
 
     getObstaculos(){
         return this.obstaculos;
+    }
+
+    getTrampas(){
+        return this.trampas;
     }
     
     update () {
@@ -94,14 +115,20 @@ class EscenarioDinamico extends THREE.Object3D {
         }
 
         this.obstaculos = [];
+        this.trampas = [];
 
         for(let l=0 ; l<this.num_lineas ; l++){
             var obstaculo = this.escenario.children[l].getObstaculos();
             for(let o = 0 ; o < obstaculo.length ; o++){
                 this.obstaculos.push(obstaculo[o]);
             }
+            var trampa = this.escenario.children[l].getTrampas();
+            for(let o = 0 ; o < trampa.length ; o++){
+                this.trampas.push(trampa[o]);
+            }
         }
 
         this.obstaculos = this.obstaculos.filter(function(dato){return dato != undefined;});
+        this.trampas = this.trampas.filter(function(dato){return dato != undefined;});
     }
 }

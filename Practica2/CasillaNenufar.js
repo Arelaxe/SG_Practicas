@@ -8,6 +8,7 @@ class CasillaNenufar extends THREE.Object3D {
     }
     
     createCasilla(x,y,z){
+      var agua = new CasillaAgua(x,y,z);
       var boxGeom = new THREE.BoxBufferGeometry (4.5,0.25,4.5);
 
       var textura = new THREE.TextureLoader().load('imgs/nenufar.png');
@@ -16,10 +17,11 @@ class CasillaNenufar extends THREE.Object3D {
       var box = new THREE.Mesh (boxGeom, boxMat);
 
       box.position.x = x;
-      box.position.y = y;
+      box.position.y = agua.position.y + 0.5;
       box.position.z = z;
   
       var casilla = new THREE.Object3D();
+      casilla.add(agua);
       casilla.add(box);
   
       return casilla;

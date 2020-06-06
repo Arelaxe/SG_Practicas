@@ -388,10 +388,13 @@ class MyScene extends THREE.Scene {
     rayCaster.push(new THREE.Raycaster(posicionPersonaje, new THREE.Vector3(0,0,-1),0,1));
     rayCaster.push(new THREE.Raycaster(posicionPersonaje, new THREE.Vector3(1,0,0),0,1));
     rayCaster.push(new THREE.Raycaster(posicionPersonaje, new THREE.Vector3(-1,0,0),0,1));
+    rayCaster.push(new THREE.Raycaster(posicionPersonaje, new THREE.Vector3(0,-1,0),0,1));
     var rayGeom = new THREE.Geometry();
     var obstaculos = this.getObstaculos();
+    var armas = this.getTrampas();
     for(let rayo = 0 ; rayo < rayCaster.length ; rayo++){
-      var intersecciones = rayCaster[rayo].intersectObjects(obstaculos,true);
+      rayCaster[rayo].far = 1 ;
+      var intersecciones = rayCaster[rayo].intersectObjects(armas,true);
       if (intersecciones.length > 0){
         /*rayGeom.vertices.push(posicionPersonaje);
         rayGeom.vertices.push(intersecciones[0].point);
@@ -401,11 +404,22 @@ class MyScene extends THREE.Scene {
         this.add(line);*/
         this.estado = MyScene.DEATH;
       }
+      else{
+        rayCaster[rayo].far = 2 ;
+        intersecciones = rayCaster[rayo].intersectObjects(obstaculos,true);
+        if (intersecciones.length > 0){
+          alert("Hay un obstáculo");
+        }
+      }
     }
     }
 
   getObstaculos(){
     return this.model2.getObstaculos();
+  }
+
+  getTrampas(){
+    return this.model2.getTrampas();
   }
 }
 

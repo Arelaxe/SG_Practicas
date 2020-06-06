@@ -3,6 +3,7 @@
       super();
   
       this.casilla = this.createCasilla(x,y,z);
+      this.canKill = true ;
 
       this.add(this.casilla);
     }

@@ -52,6 +52,10 @@ class LineaCesped extends THREE.Object3D {
     getObstaculos(){
       return this.obstaculos;
     }
+
+    getTrampas(){
+      return [];
+    }
     
     update () {
     }

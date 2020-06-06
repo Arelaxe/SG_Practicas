@@ -11,9 +11,14 @@ class LineaAgua extends THREE.Object3D {
           this.madera = false;
       }
   
+      this.trampas = [];
       this.linea = this.createLinea(num_linea);
 
       this.add(this.linea);
+    }
+
+    getTrampas(){
+      return this.trampas ;
     }
 
     getObstaculos(){
@@ -25,12 +30,14 @@ class LineaAgua extends THREE.Object3D {
         var linea = new THREE.Group();
 
         for (var i=0; i<25; i++){
-          var casilla = new CasillaAgua(num_linea*5,0,i*5);
-        
-          linea.add(casilla);
-          
           var transitable = Math.random() * (10 - 0) + 0;
 
+          if(transitable <=5 ){
+            var cas = new CasillaAgua(num_linea*5,0,i*5);
+            linea.add(cas);
+            this.trampas.push(cas);
+          }
+          
           if (transitable > 5){
             if(this.madera){
               var cas = new CasillaMadera(num_linea*5,0.25,i*5);

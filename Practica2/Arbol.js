@@ -6,7 +6,7 @@ class Arbol extends THREE.Object3D{
         var materialLoader = new THREE.MTLLoader();
         var objectLoader = new THREE.OBJLoader();
 
-        this.isObstacle = true ;
+        this.canKill = false ;
 
         materialLoader.load('models/tree/lowpolytree.mtl',
             function(material){

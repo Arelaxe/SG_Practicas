@@ -21,6 +21,10 @@ class LineaInicial extends THREE.Object3D {
     }
 
     getObstaculos(){return [];}
+
+    getTrampas(){
+      return [];
+    }
     
     update () {
     }

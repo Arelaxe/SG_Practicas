@@ -3,7 +3,7 @@
       super();
   
       this.linea = this.createLinea(num_linea);
-      this.obstaculos = [];
+      this.trampas = [];
 
       this.add(this.linea);
 
@@ -24,8 +24,12 @@
         return linea;
     }
 
+    getTrampas(){
+      return this.trampas ;
+    }
+
     getObstaculos(){
-      return this.obstaculos ;
+      return [] ;
     }
     
     update () {
@@ -51,7 +55,7 @@
         this.contador_coche = Date.now();
         this.tiempo_anterior = Date.now();
         this.hay_coche = true; 
-        this.obstaculos.push(this.coche);
+        this.trampas.push(this.coche);
       } 
 
       if(this.hay_coche){
