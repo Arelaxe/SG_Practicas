@@ -22,25 +22,9 @@ class MyScene extends THREE.Scene {
       
       // Tendremos una cámara con un control de movimiento con el ratón
       this.createCamera ();
-      
-      // Un suelo 
-      // this.createGround ();
-      
-      // Y unos ejes. Imprescindibles para orientarnos sobre dónde están las cosas
-      this.axis = new THREE.AxesHelper (5);
-      this.add (this.axis);
-      
-      
-      // Por último creamos el modelo.
-      // El modelo puede incluir su parte de la interfaz gráfica de usuario. Le pasamos la referencia a 
-      // la gui y el texto bajo el que se agruparán los controles de la interfaz que añada el modelo.
-      //this.model = new Coche();
-      //this.model.position.set(0,0,0);
-      //this.model.scale.x = 0.25;
-      //this.model.scale.y = 0.25;
-      //this.model.scale.z = 0.25;
+     
       this.puntuacion = 0;
-      this.model2 = new EscenarioDinamico(10);
+      this.model2 = new EscenarioDinamico(7);
       this.model3 = new Personaje();
       //this.add (this.model);
       this.add (this.model2);
@@ -48,6 +32,10 @@ class MyScene extends THREE.Scene {
       this.setMessage(this.puntuacion);
 
       this.model3.position.y = 2.20;
+      this.model3.position.z = 62.5;
+      this.model3.position.x = -5;
+      this.model3.rotateY(Math.PI/2);
+      
       this.estado = MyScene.IDLE ;
       this.direccion = MyScene.IDLE ;
       this.partida = MyScene.NOTSTARTED;
@@ -62,7 +50,7 @@ class MyScene extends THREE.Scene {
       this.remove(this.model3);
       this.remove(this.model2);
       this.remove(this.camera);
-      this.model2 = new EscenarioDinamico(10);
+      this.model2 = new EscenarioDinamico(7);
       this.model3 = new Personaje();
       //this.add (this.model);
       this.add (this.model2);
@@ -71,6 +59,10 @@ class MyScene extends THREE.Scene {
       this.createCamera ();
 
       this.model3.position.y = 2.20;
+      this.model3.position.z = 62.5;
+      this.model3.position.x = -5;
+      this.model3.rotateY(Math.PI/2);
+      
       this.estado = MyScene.IDLE ;
       this.direccion = MyScene.IDLE ;
       this.dead = false ;
@@ -129,9 +121,9 @@ class MyScene extends THREE.Scene {
       //   Los planos de recorte cercano y lejano
       this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
       // También se indica dónde se coloca
-      this.camera.position.set (-20, 40, 25);
+      this.camera.position.set (-20, 30, 62.5);
       // Y hacia dónde mira
-      var look = new THREE.Vector3 (0,0,25);
+      var look = new THREE.Vector3 (0,0,62.5);
       this.lookx = 0;
       this.camera.lookAt(look);
       this.add (this.camera);
@@ -178,7 +170,6 @@ class MyScene extends THREE.Scene {
       this.guiControls = new function() {
         // En el contexto de una función   this   alude a la función
         this.lightIntensity = 0.8;
-        this.axisOnOff = true;
       }
   
       // Se crea una sección para los controles de esta clase
@@ -186,9 +177,6 @@ class MyScene extends THREE.Scene {
       
       // Se le añade un control para la intensidad de la luz
       folder.add (this.guiControls, 'lightIntensity', 0, 1, 0.1).name('Intensidad de la Luz : ');
-      
-      // Y otro para mostrar u ocultar los ejes
-      folder.add (this.guiControls, 'axisOnOff').name ('Mostrar ejes : ');
       
       return gui;
     }
@@ -249,7 +237,7 @@ class MyScene extends THREE.Scene {
       var segs = (tiempo_actual-this.tiempo_camara)/1000;
 
       this.lookx += segs*2.5;
-      var look = new THREE.Vector3 (this.lookx,0,25);
+      var look = new THREE.Vector3 (this.lookx,0,62.5);
       this.camera.lookAt(look);
       this.cameraControl.target = look;
       this.camera.position.x += segs*2.5;
@@ -259,13 +247,6 @@ class MyScene extends THREE.Scene {
 
       // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
       this.renderer.render (this, this.getCamera());
-  
-      // Se actualizan los elementos de la escena para cada frame
-      // Se actualiza la intensidad de la luz con lo que haya indicado el usuario en la gui
-      //this.spotLight.intensity = this.guiControls.lightIntensity;
-      
-      // Se muestran o no los ejes según lo que idique la GUI
-      this.axis.visible = this.guiControls.axisOnOff;
       
       // Se actualiza el resto del modelo
       //this.model.update();

@@ -15,7 +15,7 @@
         var linea = new THREE.Group();
         this.num_linea = num_linea;
 
-        for (var i=0; i<10; i++){
+        for (var i=0; i<25; i++){
           var casilla = new CasillaCarretera(num_linea*5,0,i*5);
         
           linea.add(casilla);
@@ -44,7 +44,7 @@
         this.hay_coche = true; 
         this.obstaculos.push(this.coche);
       } 
-//hey
+      
       if(this.hay_coche){
         var tiempo_actual = Date.now();
 

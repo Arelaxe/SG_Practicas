@@ -17,10 +17,16 @@ class EscenarioDinamico extends THREE.Object3D {
 
         var linea;
 
-        linea = new LineaInicial();
+        linea = new LineaInicial(-4);
+        escenario.add(linea);
+        linea = new LineaInicial(-3);
+        escenario.add(linea);
+        linea = new LineaInicial(-2);
+        escenario.add(linea);
+        linea = new LineaInicial(-1);
         escenario.add(linea);
 
-        for (var i=1; i<num_lineas; i++){
+        for (var i=0; i<num_lineas; i++){
             var tipo_linea = Math.random() * (3 - 0) + 0;
 
             if (tipo_linea >= 0 && tipo_linea < 1){
@@ -57,7 +63,7 @@ class EscenarioDinamico extends THREE.Object3D {
     update () {
         this.obstaculos = this.obstaculos.filter(function(dato){return dato != undefined;});
         var tiempo_actual = new Date ();
-        if ((tiempo_actual-this.tiempo_borrar) > 6000){
+        if ((tiempo_actual-this.tiempo_borrar) > 2000){
             this.tiempo_borrar = new Date();
             this.escenario.remove(this.escenario.children[0]); 
             this.num_lineas--;           

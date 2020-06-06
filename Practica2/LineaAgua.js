@@ -20,7 +20,7 @@ class LineaAgua extends THREE.Object3D {
     createLinea(num_linea){
         var linea = new THREE.Group();
 
-        for (var i=0; i<10; i++){
+        for (var i=0; i<25; i++){
           var casilla = new CasillaAgua(num_linea*5,0,i*5);
         
           linea.add(casilla);

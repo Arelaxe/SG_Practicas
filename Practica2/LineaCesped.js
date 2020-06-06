@@ -13,14 +13,14 @@ class LineaCesped extends THREE.Object3D {
     createLinea(num_linea){
         var linea = new THREE.Group();
 
-        for (var i=0; i<10; i++){
+        for (var i=0; i<25; i++){
           var casilla = new CasillaCesped(num_linea*5,0,i*5);
         
           linea.add(casilla);
 
           var obstaculo = Math.random() * (10 - 0) + 0;
 
-          if (obstaculo <= 3){
+          if (obstaculo <= 1){
               var arbol = new Arbol();
               arbol.scale.x = 1.5;
               arbol.scale.y = 1.5;
@@ -32,7 +32,7 @@ class LineaCesped extends THREE.Object3D {
               this.obstaculos.push(arbol);
           }
 
-          if (obstaculo > 3 && obstaculo <= 5){
+          if (obstaculo > 1 && obstaculo <= 2){
               var rock = new Rock();
               rock.scale.x = 1.75;
               rock.scale.y = 1.75;
