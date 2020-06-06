@@ -6,6 +6,8 @@ class Rock extends THREE.Object3D{
         var materialLoader = new THREE.MTLLoader();
         var objectLoader = new THREE.OBJLoader();
 
+        this.isObstacle = true ;
+
         materialLoader.load('models/rock/Stone.png',
             function(material){
                 objectLoader.setMaterials(material);
@@ -36,7 +38,6 @@ class Rock extends THREE.Object3D{
             
                 });
             });
-            console.log(this);
     }
 
     update(){

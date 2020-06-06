@@ -54,6 +54,7 @@ class MyScene extends THREE.Scene {
       this.dead = false ;
 
       this.tiempo = Date.now();
+      this.initAudio();
     }
 
     nuevaPartida(){
@@ -76,6 +77,50 @@ class MyScene extends THREE.Scene {
 
       this.tiempo = Date.now();
     }
+
+    initAudio(){
+         // instantiate a listener
+         var audioListener = new THREE.AudioListener();
+
+         // add the listener to the camera
+         this.camera.add( audioListener );
+ 
+         // instantiate audio object
+         var oceanAmbientSound = new THREE.Audio( audioListener );
+ 
+         // add the audio object to the scene
+         this.add( oceanAmbientSound );
+ 
+         // instantiate a loader
+         var loader = new THREE.AudioLoader();
+ 
+         // load a resource
+         loader.load(
+       // resource URL
+       'audio/BlipStream.mp3',
+ 
+       // onLoad callback
+       function ( audioBuffer ) {
+         // set the audio object buffer to the loaded object
+         oceanAmbientSound.setBuffer( audioBuffer );
+ 
+         // play the audio
+         oceanAmbientSound.play();
+       },
+ 
+       // onProgress callback
+       function ( xhr ) {
+         console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+       },
+ 
+       // onError callback
+       function ( err ) {
+         console.log( 'An error happened' );
+       }
+     );
+    }
+
+
     
     createCamera () {
       // Para crear una cámara le indicamos
@@ -90,7 +135,6 @@ class MyScene extends THREE.Scene {
       this.lookx = 0;
       this.camera.lookAt(look);
       this.add (this.camera);
-      console.log(this.camera);
       this.tiempo_camara = Date.now();
       
       // Para el control de cámara usamos una clase que ya tiene implementado los movimientos de órbita
@@ -226,18 +270,17 @@ class MyScene extends THREE.Scene {
       // Se actualiza el resto del modelo
       //this.model.update();
       this.model2.update();
+      this.checkCollisions();
       this.saltar();
       this.aplastar();
       
-      console.log(this.estado);
     }
 
     onKeyPressed () {
       var tecla = event.which || event.keyCode ;
       var letra = String.fromCharCode(tecla);
-      if(this.estado != MyScene.WAIT && this.estado != MyScene.DEAD && this.partida == MyScene.STARTED){
+      if(this.partida == MyScene.STARTED){
       if(tecla == 38 || letra.toUpperCase() == "W"){
-        console.log("Arriba");
         this.estado = MyScene.JUMP ;
         this.direccion = MyScene.UP ;
         this.puntuacion++;
@@ -268,7 +311,7 @@ class MyScene extends THREE.Scene {
     }
 
     saltar(){
-      var distancia = 175 ;
+      var distancia = 250 ;
       var tiempototal = 250 ;
       var velocidad = distancia/tiempototal ;
       if(this.estado == MyScene.JUMP){
@@ -324,7 +367,7 @@ class MyScene extends THREE.Scene {
 
   aplastar(){
     var escala = 1 ;
-    var tiempototal = 200 ;
+    var tiempototal = 2000 ;
     var velocidad = escala/tiempototal ;
     if(this.estado ==  MyScene.DEATH){
       this.tiempo = Date.now();
@@ -338,6 +381,7 @@ class MyScene extends THREE.Scene {
         this.model3.scale.y = velocidad * elapsed/tiempototal ;
       else {
         this.estado = MyScene.DEAD;
+        this.partida = MyScene.NOTSTARTED ;
         this.model3.position.y = 0.3 ;
         document.getElementById("gameover").style.display = "block";
       } 
@@ -345,6 +389,33 @@ class MyScene extends THREE.Scene {
   }
   setMessage (str) {
     document.getElementById("msg").innerHTML = "Puntuación: "+str;
+  }
+
+  checkCollisions(){
+    var posicionPersonaje = this.model3.position ;
+    var rayCaster = [];
+    rayCaster.push(new THREE.Raycaster(posicionPersonaje, new THREE.Vector3(0,0,1),0,1));
+    rayCaster.push(new THREE.Raycaster(posicionPersonaje, new THREE.Vector3(0,0,-1),0,1));
+    rayCaster.push(new THREE.Raycaster(posicionPersonaje, new THREE.Vector3(1,0,0),0,1));
+    rayCaster.push(new THREE.Raycaster(posicionPersonaje, new THREE.Vector3(-1,0,0),0,1));
+    var rayGeom = new THREE.Geometry();
+    var obstaculos = this.getObstaculos();
+    for(let rayo = 0 ; rayo < rayCaster.length ; rayo++){
+      var intersecciones = rayCaster[rayo].intersectObjects(obstaculos,true);
+      if (intersecciones.length > 0){
+        /*rayGeom.vertices.push(posicionPersonaje);
+        rayGeom.vertices.push(intersecciones[0].point);
+  
+        this.remove(line);
+        var line = new THREE.Line(rayGeom,new THREE.LineBasicMaterial({color:0x00ffbb}));
+        this.add(line);*/
+        this.estado = MyScene.DEATH;
+      }
+    }
+    }
+
+  getObstaculos(){
+    return this.model2.getObstaculos();
   }
 }
 

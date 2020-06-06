@@ -1,8 +1,10 @@
 class LineaCesped extends THREE.Object3D {
     constructor(num_linea) {
       super();
-  
+
+      this.obstaculos = [];  
       this.linea = this.createLinea(num_linea);
+
 
       this.add(this.linea);
     }
@@ -27,6 +29,7 @@ class LineaCesped extends THREE.Object3D {
               arbol.position.z = i*5;
               arbol.position.x = 5*num_linea;
               this.add(arbol);
+              this.obstaculos.push(arbol);
           }
 
           if (obstaculo > 3 && obstaculo <= 5){
@@ -38,11 +41,16 @@ class LineaCesped extends THREE.Object3D {
               rock.position.z = i*5;
               rock.position.x = 5*num_linea;
               this.add(rock);
+              this.obstaculos.push(rock);
           }
             
         }
 
         return linea;
+    }
+
+    getObstaculos(){
+      return this.obstaculos;
     }
     
     update () {

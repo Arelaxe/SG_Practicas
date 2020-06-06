@@ -3,6 +3,7 @@
       super();
   
       this.linea = this.createLinea(num_linea);
+      this.obstaculos = [];
 
       this.add(this.linea);
 
@@ -22,6 +23,10 @@
 
         return linea;
     }
+
+    getObstaculos(){
+      return this.obstaculos ;
+    }
     
     update () {
       var val = Math.random() * (100000 - 0) + 0;
@@ -36,8 +41,8 @@
         this.coche.rotation.y += Math.PI/2;
         this.add(this.coche);
         this.tiempo_anterior = Date.now();
-
         this.hay_coche = true; 
+        this.obstaculos.push(this.coche);
       } 
 //hey
       if(this.hay_coche){
