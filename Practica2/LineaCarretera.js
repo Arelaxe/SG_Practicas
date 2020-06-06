@@ -8,7 +8,7 @@
       this.add(this.linea);
 
       this.hay_coche = false;  
-      this.velocidad = 1.5;    
+      this.velocidad = 50;    
     }
     
     createLinea(num_linea){
@@ -56,7 +56,6 @@
 
       if(this.hay_coche){
         var tiempo_actual = Date.now();
-        
 
         var segundosTranscurridos = (tiempo_actual-this.tiempo_anterior)/1000;
         var tiempo_coche = (tiempo_actual-this.contador_coche)/1000;
@@ -71,7 +70,7 @@
           this.remove(this.coche);
           this.hay_coche = false;
         }
-        this.tiempo_anterior = this.tiempo_actual;
+        this.tiempo_anterior = tiempo_actual;
       }
     }
   }
