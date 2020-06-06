@@ -78,17 +78,9 @@ class EscenarioDinamico extends THREE.Object3D {
             }
             else if (tipo_linea >= 1 && tipo_linea < 2){
                 linea = new LineaCesped(this.num_linea_actual);
-                var obstaculo = linea.getObstaculos();
-                for(let o = 0 ; o < obstaculo.length ; o++){
-                    this.obstaculos.push(obstaculo[o]);
-                }
             }
             else{
                 linea = new LineaCarretera(this.num_linea_actual);
-                var obstaculo = linea.getObstaculos();
-                for(let o = 0 ; o < obstaculo.length ; o++){
-                    this.obstaculos.push(obstaculo[o]);
-                }
             }
         
             this.num_linea_actual++;
@@ -98,13 +90,18 @@ class EscenarioDinamico extends THREE.Object3D {
         else{
             for (var i=0; i<this.num_lineas; i++){
                 this.escenario.children[i].update();
-                if(this.escenario.children[i] instanceof LineaCarretera){
-                    var obstaculo = this.escenario.children[i].getObstaculos();
-                    for(let o = 0 ; o < obstaculo.length ; o++){
-                        this.obstaculos.push(obstaculo[o]);
-                    }
-                }
             }
         }
+
+        this.obstaculos = [];
+
+        for(let l=0 ; l<this.num_lineas ; l++){
+            var obstaculo = this.escenario.children[l].getObstaculos();
+            for(let o = 0 ; o < obstaculo.length ; o++){
+                this.obstaculos.push(obstaculo[o]);
+            }
+        }
+
+        this.obstaculos = this.obstaculos.filter(function(dato){return dato != undefined;});
     }
 }

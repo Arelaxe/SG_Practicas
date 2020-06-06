@@ -16,6 +16,10 @@ class LineaAgua extends THREE.Object3D {
       this.add(this.linea);
     }
 
+    getObstaculos(){
+      return [];
+    }
+
     
     createLinea(num_linea){
         var linea = new THREE.Group();

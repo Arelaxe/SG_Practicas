@@ -30,6 +30,7 @@ class MyScene extends THREE.Scene {
       this.add (this.model2);
       this.add (this.model3);
       this.setMessage(this.puntuacion);
+      this.stats = new Stats();
 
       this.model3.position.y = 2.20;
       this.model3.position.z = 62.5;
@@ -40,6 +41,9 @@ class MyScene extends THREE.Scene {
       this.direccion = MyScene.IDLE ;
       this.partida = MyScene.NOTSTARTED;
       this.dead = false ;
+
+      this.stats.showPanel(0) ;
+      document.body.appendChild( this.stats.dom );
 
       this.tiempo = Date.now();
       this.initAudio();
@@ -78,10 +82,10 @@ class MyScene extends THREE.Scene {
          this.camera.add( audioListener );
  
          // instantiate audio object
-         var oceanAmbientSound = new THREE.Audio( audioListener );
+         var sonido = new THREE.Audio( audioListener );
  
          // add the audio object to the scene
-         this.add( oceanAmbientSound );
+         this.add( sonido );
  
          // instantiate a loader
          var loader = new THREE.AudioLoader();
@@ -94,10 +98,11 @@ class MyScene extends THREE.Scene {
        // onLoad callback
        function ( audioBuffer ) {
          // set the audio object buffer to the loaded object
-         oceanAmbientSound.setBuffer( audioBuffer );
+         sonido.setBuffer( audioBuffer );
+         sonido.setVolume(0.25);
  
          // play the audio
-         oceanAmbientSound.play();
+         sonido.play();
        },
  
        // onProgress callback
@@ -230,7 +235,9 @@ class MyScene extends THREE.Scene {
     update () {
       // Literalmente le decimos al navegador: "La próxima vez que haya que refrescar la pantalla, llama al método que te indico".
       // Si no existiera esta línea,  update()  se ejecutaría solo la primera vez.
-      requestAnimationFrame(() => this.update())
+      requestAnimationFrame(() => this.update());
+
+      this.stats.begin();
 
       // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
       var tiempo_actual = Date.now();
@@ -254,6 +261,8 @@ class MyScene extends THREE.Scene {
       this.checkCollisions();
       this.saltar();
       this.aplastar();
+
+      this.stats.end();
       
     }
 
