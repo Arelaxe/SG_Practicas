@@ -8,7 +8,7 @@ class CasillaNenufar extends THREE.Object3D {
     }
     
     createCasilla(x,y,z){
-      var boxGeom = new THREE.BoxGeometry (4.5,0.25,4.5);
+      var boxGeom = new THREE.BoxBufferGeometry (4.5,0.25,4.5);
 
       var textura = new THREE.TextureLoader().load('imgs/nenufar.png');
       var boxMat = new THREE.MeshPhongMaterial({map:textura});

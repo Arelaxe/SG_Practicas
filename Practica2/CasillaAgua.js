@@ -8,7 +8,7 @@
     }
     
     createCasilla(x,y,z){
-      var boxGeom = new THREE.BoxGeometry (5,0.25,5);
+      var boxGeom = new THREE.BoxBufferGeometry (5,0.25,5);
 
       var textura = new THREE.TextureLoader().load('imgs/agua.png');
       var boxMat = new THREE.MeshPhongMaterial({map:textura});

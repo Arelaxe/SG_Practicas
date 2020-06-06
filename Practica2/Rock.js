@@ -18,7 +18,7 @@ class Rock extends THREE.Object3D{
                     var bounding = new THREE.BoxHelper(modelo);
                     bounding.geometry.computeBoundingBox();
                     var bb = bounding.geometry.boundingBox;
-                    var geomCollider = new THREE.BoxGeometry(bb.max.x-bb.min.x,bb.max.y-bb.min.y,bb.max.z-bb.min.z);
+                    var geomCollider = new THREE.BoxBufferGeometry(bb.max.x-bb.min.x,bb.max.y-bb.min.y,bb.max.z-bb.min.z);
                     geomCollider.translate(0.3,0,0)
                     var matCollider = new THREE.MeshPhongMaterial({color:0xaaaaaa, transparent:true, opacity:0.5});
                     var collider = new THREE.Mesh(geomCollider,matCollider);
