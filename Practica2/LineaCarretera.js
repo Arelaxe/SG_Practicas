@@ -37,9 +37,18 @@
         this.coche.scale.z = 0.1;
         this.coche.position.y = 1;
         this.coche.position.x = this.num_linea*5;
-        this.coche.position.z = 125;
-        this.coche.rotation.y += Math.PI/2;
+        if (val > 99750){
+          this.coche.position.z = 125;
+          this.coche.rotation.y += Math.PI/2;
+          this.derecha = true;
+        }
+        else{
+          this.coche.position.z = 0;
+          this.coche.rotation.y += -(Math.PI/2);
+          this.derecha = false;
+        }
         this.add(this.coche);
+        this.contador_coche = Date.now();
         this.tiempo_anterior = Date.now();
         this.hay_coche = true; 
         this.obstaculos.push(this.coche);
@@ -47,14 +56,22 @@
 
       if(this.hay_coche){
         var tiempo_actual = Date.now();
+        
 
         var segundosTranscurridos = (tiempo_actual-this.tiempo_anterior)/1000;
-        this.coche.position.z -= this.velocidad * segundosTranscurridos;
+        var tiempo_coche = (tiempo_actual-this.contador_coche)/1000;
+        if(this.derecha){
+          this.coche.position.z -= this.velocidad * segundosTranscurridos;
+        }
+        else{
+          this.coche.position.z += this.velocidad * segundosTranscurridos;
+        }
 
-        if(segundosTranscurridos > 3){
+        if(tiempo_coche > 3){
           this.remove(this.coche);
           this.hay_coche = false;
         }
+        this.tiempo_anterior = this.tiempo_actual;
       }
     }
   }
