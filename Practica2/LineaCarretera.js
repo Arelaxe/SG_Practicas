@@ -37,21 +37,21 @@
         this.coche.scale.z = 0.1;
         this.coche.position.y = 1;
         this.coche.position.x = this.num_linea*5;
-        this.coche.position.z = 45;
+        this.coche.position.z = 125;
         this.coche.rotation.y += Math.PI/2;
         this.add(this.coche);
         this.tiempo_anterior = Date.now();
         this.hay_coche = true; 
         this.obstaculos.push(this.coche);
       } 
-      
+
       if(this.hay_coche){
         var tiempo_actual = Date.now();
 
         var segundosTranscurridos = (tiempo_actual-this.tiempo_anterior)/1000;
         this.coche.position.z -= this.velocidad * segundosTranscurridos;
 
-        if(segundosTranscurridos > 1.5){
+        if(segundosTranscurridos > 3){
           this.remove(this.coche);
           this.hay_coche = false;
         }
