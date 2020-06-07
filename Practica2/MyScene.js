@@ -447,6 +447,7 @@ class MyScene extends THREE.Scene {
         this.partida = MyScene.NOTSTARTED ;
         this.model3.position.y = 0.3 ;
         document.getElementById("gameover").style.display = "block";
+        document.getElementById("gameover").innerHTML += "Tu puntuación es: " + this.puntuacion;
       } 
     }
   }
