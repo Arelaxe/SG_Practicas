@@ -33,7 +33,7 @@ class MyScene extends THREE.Scene {
       this.stats = new Stats();
 
       this.model3.position.y = 2.20;
-      this.model3.position.z = 62.5;
+      this.model3.position.z = 60;
       this.model3.position.x = -5;
       this.model3.rotateY(Math.PI/2);
       
@@ -51,6 +51,9 @@ class MyScene extends THREE.Scene {
 
     nuevaPartida(){
       this.puntuacion = 0;
+      this.posx = -7.5;
+      this.posy = 2.20;
+      this.posz = 60;
       this.remove(this.model3);
       this.remove(this.model2);
       this.remove(this.camera);
@@ -63,12 +66,12 @@ class MyScene extends THREE.Scene {
       this.createCamera ();
 
       this.model3.position.y = 2.20;
-      this.model3.position.z = 62.5;
+      this.model3.position.z = 60;
       this.model3.position.x = -5;
       this.model3.rotateY(Math.PI/2);
       
       this.estado = MyScene.IDLE ;
-      this.direccion = MyScene.IDLE ;
+      this.direccion = MyScene.UP ;
       this.dead = false ;
 
       this.tiempo = Date.now();
@@ -259,8 +262,9 @@ class MyScene extends THREE.Scene {
       //this.model.update();
       this.model2.update();
       this.checkCollisions();
-      this.saltar();
       this.aplastar();
+
+      TWEEN.update();
 
       this.stats.end();
       
@@ -270,25 +274,37 @@ class MyScene extends THREE.Scene {
       var tecla = event.which || event.keyCode ;
       var letra = String.fromCharCode(tecla);
       if(this.partida == MyScene.STARTED){
-      if(tecla == 38 || letra.toUpperCase() == "W"){
-        this.estado = MyScene.JUMP ;
-        this.direccion = MyScene.UP ;
-        this.puntuacion++;
-        this.setMessage(this.puntuacion);
-      }
-      if(tecla == 37 || letra.toUpperCase() == "A"){
-        this.estado = MyScene.JUMP ;
-        this.direccion = MyScene.LEFT ;
-      }
-      if(tecla == 39 || letra.toUpperCase() == "D"){
-        this.estado = MyScene.JUMP ;
-        this.direccion = MyScene.RIGHT ;
-      }
-      if(tecla == 40 || letra.toUpperCase() == "S"){
-        this.estado = MyScene.DEATH ;
-        this.partida = MyScene.NOTSTARTED;
-        document.getElementById("gameover").style.display = "none";
-      }
+        if(tecla == 38 || letra.toUpperCase() == "W"){
+          if(this.model3.position.x % 5 == 0){
+            this.model3.rotation.y = Math.PI/2;
+            this.direccion = MyScene.UP;
+            this.puntuacion++;
+            this.salto_adelante();
+            this.posx += 2.5;
+            this.setMessage(this.puntuacion);
+          }
+        }
+        if(tecla == 37 || letra.toUpperCase() == "A"){
+          if(this.model3.position.z % 5 == 0){
+            this.model3.rotation.y = Math.PI;
+            this.direccion = MyScene.LEFT;
+            this.salto_izquierda();
+            this.posz -= 2.5;
+          }
+        }
+        if(tecla == 39 || letra.toUpperCase() == "D"){
+          if(this.model3.position.z % 5 == 0){
+            this.model3.rotation.y = 0;
+            this.salto_derecha();
+            this.posz += 2.5;
+            this.direccion = MyScene.RIGHT;
+          }
+        }
+        if(tecla == 40 || letra.toUpperCase() == "S"){
+          this.estado = MyScene.DEATH ;
+          this.partida = MyScene.NOTSTARTED;
+          document.getElementById("gameover").style.display = "none";
+        }
     }
     else if (this.partida == MyScene.NOTSTARTED){
       if(letra.toUpperCase() == " "){
@@ -300,60 +316,71 @@ class MyScene extends THREE.Scene {
     }
     }
 
-    saltar(){
-      var distancia = 250 ;
-      var tiempototal = 250 ;
-      var velocidad = distancia/tiempototal ;
-      if(this.estado == MyScene.JUMP){
-          this.tiempo = Date.now();
-          this.estado = MyScene.WAIT ;
-          if (this.direccion == MyScene.UP)
-            this.model3.rotation.y = Math.PI/2;
-          if (this.direccion == MyScene.LEFT)
-            this.model3.rotation.y = Math.PI;
-          if (this.direccion == MyScene.RIGHT)
-            this.model3.rotation.y = 0;
-       }
+    salto_adelante(){
+      var origen = {x: this.posx, y: this.posy, z: this.posz};
+      var mitad = {x: this.posx+2.5, y: this.posy+1.0, z: this.posz};
+      var destino = {x: this.posx+5, y: this.posy, z: this.posz};
+      
+      var animacion1 = new TWEEN.Tween(origen).to(mitad,100);
+      var animacion2 = new TWEEN.Tween(mitad).to(destino,100);
+      animacion1.easing(TWEEN.Easing.Quadratic.InOut);
+      animacion2.easing(TWEEN.Easing.Quadratic.InOut);
+      var that = this;
+      animacion1.onUpdate(function(){
+        that.model3.position.x = origen.x;
+        that.model3.position.y = origen.y;
+      });
+      animacion2.onUpdate(function(){
+        that.model3.position.x = mitad.x;
+        that.model3.position.y = mitad.y;
+      });
+      animacion1.chain(animacion2);
+      animacion1.start();
+    }
 
-      if(this.estado == MyScene.WAIT && this.direccion != MyScene.IDLE){
-        var time = Date.now();
-        var elapsed = time-this.tiempo ;
-        if(elapsed < tiempototal){
-          if(this.direccion == MyScene.UP){
-            if (elapsed < tiempototal/2) {
-                this.model3.position.y += elapsed/tiempototal;
-                this.model3.position.x += velocidad * elapsed/tiempototal;
-            } else {
-                this.model3.position.y -= elapsed/tiempototal;
-                this.model3.position.x += velocidad * elapsed/tiempototal;
-            }
-          }
-          if(this.direccion == MyScene.LEFT){
-            if (elapsed < tiempototal/2) {
-              this.model3.position.y += elapsed/tiempototal;
-              this.model3.position.z -= velocidad * elapsed/tiempototal;
-          } else {
-              this.model3.position.y -= elapsed/tiempototal;
-              this.model3.position.z -= velocidad * elapsed/tiempototal;
-          }
-          }
-          if(this.direccion == MyScene.RIGHT){
-            if (elapsed < tiempototal/2) {
-              this.model3.position.y += elapsed/tiempototal;
-              this.model3.position.z += velocidad * elapsed/tiempototal;
-          } else {
-              this.model3.position.y -= elapsed/tiempototal;
-              this.model3.position.z += velocidad * elapsed/tiempototal;
-          }
-          }
-        }
-        else{
-            this.model3.position.y = 2.2 ;
-            this.estado = MyScene.IDLE ;
-            this.direccion = MyScene.IDLE;
-        }
-      }
-  }
+    salto_derecha(){
+      var origen = {x: this.posx, y: this.posy, z: this.posz};
+      var mitad = {x: this.posx, y: this.posy+1.0, z: this.posz+1.25};
+      var destino = {x: this.posx, y: this.posy, z: this.posz+2.5};
+      
+      var animacion1 = new TWEEN.Tween(origen).to(mitad,100);
+      var animacion2 = new TWEEN.Tween(mitad).to(destino,100);
+      animacion1.easing(TWEEN.Easing.Quadratic.InOut);
+      animacion2.easing(TWEEN.Easing.Quadratic.InOut);
+      var that = this;
+      animacion1.onUpdate(function(){
+        that.model3.position.z = origen.z;
+        that.model3.position.y = origen.y;
+      });
+      animacion2.onUpdate(function(){
+        that.model3.position.z = mitad.z;
+        that.model3.position.y = mitad.y;
+      });
+      animacion1.chain(animacion2);
+      animacion1.start();
+    }
+
+    salto_izquierda(){
+      var origen = {x: this.posx, y: this.posy, z: this.posz};
+      var mitad = {x: this.posx, y: this.posy+1.0, z: this.posz-1.25};
+      var destino = {x: this.posx, y: this.posy, z: this.posz-2.5};
+      
+      var animacion1 = new TWEEN.Tween(origen).to(mitad,100);
+      var animacion2 = new TWEEN.Tween(mitad).to(destino,100);
+      animacion1.easing(TWEEN.Easing.Quadratic.InOut);
+      animacion2.easing(TWEEN.Easing.Quadratic.InOut);
+      var that = this;
+      animacion1.onUpdate(function(){
+        that.model3.position.z = origen.z;
+        that.model3.position.y = origen.y;
+      });
+      animacion2.onUpdate(function(){
+        that.model3.position.z = mitad.z;
+        that.model3.position.y = mitad.y;
+      });
+      animacion1.chain(animacion2);
+      animacion1.start();
+    }
 
   aplastar(){
     var escala = 1 ;
