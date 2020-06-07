@@ -23,6 +23,8 @@ class CasillaMadera extends THREE.Object3D {
       var casilla = new THREE.Object3D();
       casilla.add(agua);
       casilla.add(box);
+
+      casilla.position.y -= 0.25;
   
       return casilla;
     }

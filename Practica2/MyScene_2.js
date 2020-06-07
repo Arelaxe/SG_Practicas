@@ -51,7 +51,7 @@ class MyScene extends THREE.Scene {
 
     nuevaPartida(){
       this.puntuacion = 0;
-      this.posx = -5;
+      this.posx = -7.5;
       this.posy = 2.20;
       this.posz = 60;
       this.remove(this.model3);
@@ -274,79 +274,33 @@ class MyScene extends THREE.Scene {
       var tecla = event.which || event.keyCode ;
       var letra = String.fromCharCode(tecla);
       if(this.partida == MyScene.STARTED){
-        if(letra.toUpperCase() == "W"){
+        if(tecla == 38 || letra.toUpperCase() == "W"){
           if(this.model3.position.x % 5 == 0){
             this.model3.rotation.y = Math.PI/2;
             this.direccion = MyScene.UP;
             this.puntuacion++;
             this.salto_adelante();
-            this.posx += 5;
+            this.posx += 2.5;
             this.setMessage(this.puntuacion);
           }
         }
-        if(letra.toUpperCase() == "A"){
+        if(tecla == 37 || letra.toUpperCase() == "A"){
           if(this.model3.position.z % 5 == 0){
             this.model3.rotation.y = Math.PI;
             this.direccion = MyScene.LEFT;
             this.salto_izquierda();
-            this.posz -= 5;
+            this.posz -= 2.5;
           }
         }
-        if(letra.toUpperCase() == "D"){
+        if(tecla == 39 || letra.toUpperCase() == "D"){
           if(this.model3.position.z % 5 == 0){
             this.model3.rotation.y = 0;
             this.salto_derecha();
-            this.posz += 5;
+            this.posz += 2.5;
             this.direccion = MyScene.RIGHT;
           }
         }
-        if(letra.toUpperCase() == "S"){
-          this.estado = MyScene.DEATH ;
-          this.partida = MyScene.NOTSTARTED;
-          document.getElementById("gameover").style.display = "none";
-        }
-    }
-    else if (this.partida == MyScene.NOTSTARTED){
-      if(letra.toUpperCase() == " "){
-        this.partida = MyScene.STARTED;
-        document.getElementById("init").style.display = "none";
-        document.getElementById("gameover").style.display = "none";
-        this.nuevaPartida();
-      }
-    }
-    }
-
-    onKeyDown () {
-      var tecla = event.which || event.keyCode ;
-      var letra = String.fromCharCode(tecla);
-      if(this.partida == MyScene.STARTED){
-        if(tecla == 38){
-          if(this.model3.position.x % 5 == 0){
-            this.model3.rotation.y = Math.PI/2;
-            this.direccion = MyScene.UP;
-            this.puntuacion++;
-            this.salto_adelante();
-            this.posx += 5;
-            this.setMessage(this.puntuacion);
-          }
-        }
-        if(tecla == 37){
-          if(this.model3.position.z % 5 == 0){
-            this.model3.rotation.y = Math.PI;
-            this.direccion = MyScene.LEFT;
-            this.salto_izquierda();
-            this.posz -= 5;
-          }
-        }
-        if(tecla == 39){
-          if(this.model3.position.z % 5 == 0){
-            this.model3.rotation.y = 0;
-            this.salto_derecha();
-            this.posz += 5;
-            this.direccion = MyScene.RIGHT;
-          }
-        }
-        if(tecla == 40){
+        if(tecla == 40 || letra.toUpperCase() == "S"){
           this.estado = MyScene.DEATH ;
           this.partida = MyScene.NOTSTARTED;
           document.getElementById("gameover").style.display = "none";
@@ -386,8 +340,8 @@ class MyScene extends THREE.Scene {
 
     salto_derecha(){
       var origen = {x: this.posx, y: this.posy, z: this.posz};
-      var mitad = {x: this.posx, y: this.posy+1.0, z: this.posz+2.5};
-      var destino = {x: this.posx, y: this.posy, z: this.posz+5};
+      var mitad = {x: this.posx, y: this.posy+1.0, z: this.posz+1.25};
+      var destino = {x: this.posx, y: this.posy, z: this.posz+2.5};
       
       var animacion1 = new TWEEN.Tween(origen).to(mitad,100);
       var animacion2 = new TWEEN.Tween(mitad).to(destino,100);
@@ -408,8 +362,8 @@ class MyScene extends THREE.Scene {
 
     salto_izquierda(){
       var origen = {x: this.posx, y: this.posy, z: this.posz};
-      var mitad = {x: this.posx, y: this.posy+1.0, z: this.posz-2.5};
-      var destino = {x: this.posx, y: this.posy, z: this.posz-5};
+      var mitad = {x: this.posx, y: this.posy+1.0, z: this.posz-1.25};
+      var destino = {x: this.posx, y: this.posy, z: this.posz-2.5};
       
       var animacion1 = new TWEEN.Tween(origen).to(mitad,100);
       var animacion2 = new TWEEN.Tween(mitad).to(destino,100);
@@ -447,7 +401,6 @@ class MyScene extends THREE.Scene {
         this.partida = MyScene.NOTSTARTED ;
         this.model3.position.y = 0.3 ;
         document.getElementById("gameover").style.display = "block";
-        document.getElementById("gameover").innerHTML = "<p>Game Over</p><p>Pulsa espacio para jugar otra vez</p>Tu puntuación es: " + this.puntuacion;
       } 
     }
   }
@@ -467,7 +420,7 @@ class MyScene extends THREE.Scene {
     var obstaculos = this.getObstaculos();
     var armas = this.getTrampas();
     for(let rayo = 0 ; rayo < rayCaster.length ; rayo++){
-      if (rayo < 4) rayCaster[rayo].far = 1 ;
+      if (rayo != 4) rayCaster[rayo].far = 1 ;
       else rayCaster[rayo].far = 5 ;
       var intersecciones = rayCaster[rayo].intersectObjects(armas,true);
       if (intersecciones.length > 0){
@@ -523,7 +476,7 @@ class MyScene extends THREE.Scene {
     // Se añaden los listener de la aplicación. En este caso, el que va a comprobar cuándo se modifica el tamaño de la ventana de la aplicación.
     window.addEventListener ("resize", () => scene.onWindowResize());
     window.addEventListener("keypress", () => scene.onKeyPressed());
-    window.addEventListener("keydown", () => scene.onKeyDown());
+    window.addEventListener("keydown", () => scene.onKeyPressed());
     
     // Que no se nos olvide, la primera visualización.
     scene.update();
