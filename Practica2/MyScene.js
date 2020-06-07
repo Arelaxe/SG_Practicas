@@ -257,6 +257,13 @@ class MyScene extends THREE.Scene {
 
       // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
       this.renderer.render (this, this.getCamera());
+      if (this.model2.num_linea_actual*5 <= this.model3.position.x){
+        this.estado = MyScene.DEATH;
+      }
+
+      if ((this.model2.num_linea_actual-this.model2.num_lineas-4)*5 > this.model3.position.x){
+        this.estado = MyScene.DEATH;
+      }
       
       // Se actualiza el resto del modelo
       //this.model.update();
