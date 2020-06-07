@@ -82,7 +82,6 @@ class EscenarioDinamico extends THREE.Object3D {
     }
     
     update () {
-        this.obstaculos = this.obstaculos.filter(function(dato){return dato != undefined;});
         var tiempo_actual = new Date ();
         if ((tiempo_actual-this.tiempo_borrar) > 2000){
             this.tiempo_borrar = new Date();

@@ -39,6 +39,7 @@ class MyScene extends THREE.Scene {
       
       this.estado = MyScene.IDLE ;
       this.direccion = MyScene.IDLE ;
+      this.saltos = MyScene.IDLE ;
       this.partida = MyScene.NOTSTARTED;
       this.dead = false ;
 
@@ -281,7 +282,7 @@ class MyScene extends THREE.Scene {
       var tecla = event.which || event.keyCode ;
       var letra = String.fromCharCode(tecla);
       if(this.partida == MyScene.STARTED){
-        if(letra.toUpperCase() == "W"){
+        if(letra.toUpperCase() == "W" && this.saltos != MyScene.NOTFORWARD){
           if(this.model3.position.x % 5 == 0){
             this.model3.rotation.y = Math.PI/2;
             this.direccion = MyScene.UP;
@@ -291,7 +292,7 @@ class MyScene extends THREE.Scene {
             this.setMessage(this.puntuacion);
           }
         }
-        if(letra.toUpperCase() == "A"){
+        if(letra.toUpperCase() == "A" && this.saltos != MyScene.NOTLEFT && this.saltos != MyScene.NOTSIDES){
           if(this.model3.position.z % 5 == 0){
             this.model3.rotation.y = Math.PI;
             this.direccion = MyScene.LEFT;
@@ -299,7 +300,7 @@ class MyScene extends THREE.Scene {
             this.posz -= 5;
           }
         }
-        if(letra.toUpperCase() == "D"){
+        if(letra.toUpperCase() == "D" && this.saltos != MyScene.NOTRIGHT && this.saltos != MyScene.NOTSIDES){
           if(this.model3.position.z % 5 == 0){
             this.model3.rotation.y = 0;
             this.salto_derecha();
@@ -327,7 +328,7 @@ class MyScene extends THREE.Scene {
       var tecla = event.which || event.keyCode ;
       var letra = String.fromCharCode(tecla);
       if(this.partida == MyScene.STARTED){
-        if(tecla == 38){
+        if(tecla == 38 && this.saltos != MyScene.NOTFORWARD){
           if(this.model3.position.x % 5 == 0){
             this.model3.rotation.y = Math.PI/2;
             this.direccion = MyScene.UP;
@@ -337,7 +338,7 @@ class MyScene extends THREE.Scene {
             this.setMessage(this.puntuacion);
           }
         }
-        if(tecla == 37){
+        if(tecla == 37 && this.saltos != MyScene.NOTLEFT && this.saltos != MyScene.NOTSIDES){
           if(this.model3.position.z % 5 == 0){
             this.model3.rotation.y = Math.PI;
             this.direccion = MyScene.LEFT;
@@ -345,7 +346,7 @@ class MyScene extends THREE.Scene {
             this.posz -= 5;
           }
         }
-        if(tecla == 39){
+        if(tecla == 39 && this.saltos != MyScene.NOTRIGHT && this.saltos != MyScene.NOTSIDES){
           if(this.model3.position.z % 5 == 0){
             this.model3.rotation.y = 0;
             this.salto_derecha();
@@ -465,17 +466,18 @@ class MyScene extends THREE.Scene {
   checkCollisions(){
     var posicionPersonaje = this.model3.position ;
     var rayCaster = [];
-    rayCaster.push(new THREE.Raycaster(posicionPersonaje, new THREE.Vector3(0,0,1),0,1));
-    rayCaster.push(new THREE.Raycaster(posicionPersonaje, new THREE.Vector3(0,0,-1),0,1));
-    rayCaster.push(new THREE.Raycaster(posicionPersonaje, new THREE.Vector3(1,0,0),0,1));
-    rayCaster.push(new THREE.Raycaster(posicionPersonaje, new THREE.Vector3(-1,0,0),0,1));
+    var changed = false ;
     rayCaster.push(new THREE.Raycaster(posicionPersonaje, new THREE.Vector3(0,-1,0),0,5));
+    rayCaster.push(new THREE.Raycaster(posicionPersonaje, new THREE.Vector3(0,0,1),0,2));
+    rayCaster.push(new THREE.Raycaster(posicionPersonaje, new THREE.Vector3(0,0,-1),0,2));
+    rayCaster.push(new THREE.Raycaster(posicionPersonaje, new THREE.Vector3(1,0,0),0,2));
+    rayCaster.push(new THREE.Raycaster(posicionPersonaje, new THREE.Vector3(-1,0,0),0,2));
     var rayGeom = new THREE.Geometry();
     var obstaculos = this.getObstaculos();
     var armas = this.getTrampas();
     for(let rayo = 0 ; rayo < rayCaster.length ; rayo++){
-      if (rayo < 4) rayCaster[rayo].far = 1 ;
-      else rayCaster[rayo].far = 5 ;
+      if (rayo == 0) rayCaster[rayo].far = 5 ;
+      else rayCaster[rayo].far = 1 ;
       var intersecciones = rayCaster[rayo].intersectObjects(armas,true);
       if (intersecciones.length > 0){
         /*rayGeom.vertices.push(posicionPersonaje);
@@ -487,13 +489,35 @@ class MyScene extends THREE.Scene {
         this.estado = MyScene.DEATH;
       }
       else{
-        rayCaster[rayo].far = 2 ;
+        rayCaster[rayo].far = 5 ;
         intersecciones = rayCaster[rayo].intersectObjects(obstaculos,true);
         if (intersecciones.length > 0){
-          alert("Hay un obstáculo");
+          switch (rayo) {
+            case 3:
+              changed = true;
+              this.saltos = MyScene.NOTFORWARD;
+              break;
+
+            case 1:
+              changed = true;
+              this.saltos = MyScene.NOTRIGHT;
+            break;
+
+            case 2:
+              changed = true;
+              if(this.saltos == MyScene.NOTRIGHT){
+                this.saltos = MyScene.NOTSIDES;
+              }
+              else this.saltos = MyScene.NOTLEFT;
+            break;
+          
+            default:
+              break;
+          }
         }
       }
     }
+    if (!changed) this.saltos = MyScene.IDLE;
     }
 
   getObstaculos(){
@@ -520,6 +544,12 @@ class MyScene extends THREE.Scene {
   //Estado de la partida
   MyScene.NOTSTARTED = 9;
   MyScene.STARTED = 10;
+
+   //Posibilidad de salto
+   MyScene.NOTFORWARD = 5;
+   MyScene.NOTRIGHT = 7;
+   MyScene.NOTLEFT = 11;
+   MyScene.NOTSIDES = 12;
   
   /// La función   main
   $(function () {
