@@ -32,36 +32,13 @@ class EscenarioDinamico extends THREE.Object3D {
 
             if (tipo_linea >= 0 && tipo_linea < 1){
                 linea = new LineaAgua(i);
-                var obstaculo = linea.getObstaculos();
-                for(let o = 0 ; o < obstaculo.length ; o++){
-                    this.obstaculos.push(obstaculo[o]);
-                }
-                var trampa = linea.getTrampas();
-                for(let o = 0 ; o < trampa.length ; o++){
-                    this.trampas.push(trampa[o]);
-                }
             }
             else if (tipo_linea >= 1 && tipo_linea < 2){
                 linea = new LineaCesped(i);
-                var obstaculo = linea.getObstaculos();
-                for(let o = 0 ; o < obstaculo.length ; o++){
-                    this.obstaculos.push(obstaculo[o]);
-                }
-                var trampa = linea.getTrampas();
-                for(let o = 0 ; o < trampa.length ; o++){
-                    this.trampas.push(trampa[o]);
-                }
             }
             else{
                 linea = new LineaCarretera(i);
-                var obstaculo = linea.getObstaculos();
-                for(let o = 0 ; o < obstaculo.length ; o++){
-                    this.obstaculos.push(obstaculo[o]);
-                }
-                var trampa = linea.getTrampas();
-                for(let o = 0 ; o < trampa.length ; o++){
-                    this.trampas.push(trampa[o]);
-                }
+
             }
         
             escenario.add(linea);
@@ -86,7 +63,7 @@ class EscenarioDinamico extends THREE.Object3D {
         if ((tiempo_actual-this.tiempo_borrar) > 2000){
             this.tiempo_borrar = new Date();
             this.escenario.remove(this.escenario.children[0]); 
-            this.num_lineas--;           
+            this.num_lineas--;         
         }
         else if((tiempo_actual-this.tiempo_crear) > 2000) {
             this.tiempo_crear = new Date();
@@ -106,13 +83,16 @@ class EscenarioDinamico extends THREE.Object3D {
             this.num_linea_actual++;
             this.escenario.add(linea);
             this.num_lineas++;
+            this.recargarObjetos();
         }
         else{
             for (var i=0; i<this.num_lineas; i++){
                 this.escenario.children[i].update();
             }
         }
+    }
 
+    recargarObjetos(){
         this.obstaculos = [];
         this.trampas = [];
 

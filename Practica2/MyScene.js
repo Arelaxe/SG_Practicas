@@ -24,7 +24,7 @@ class MyScene extends THREE.Scene {
       this.createCamera ();
      
       this.puntuacion = 0;
-      this.model2 = new EscenarioDinamico(7);
+      this.model2 = new EscenarioDinamico(12);
       this.model3 = new Personaje();
       //this.add (this.model);
       this.add (this.model2);
@@ -47,6 +47,7 @@ class MyScene extends THREE.Scene {
       document.body.appendChild( this.stats.dom );
 
       this.tiempo = Date.now();
+      this.relojColisiones = Date.now();
       this.initAudio();
     }
 
@@ -58,7 +59,7 @@ class MyScene extends THREE.Scene {
       this.remove(this.model3);
       this.remove(this.model2);
       this.remove(this.camera);
-      this.model2 = new EscenarioDinamico(7);
+      this.model2 = new EscenarioDinamico(12);
       this.model3 = new Personaje();
       this.add (this.model2);
       this.add (this.model3);
@@ -75,6 +76,7 @@ class MyScene extends THREE.Scene {
       this.dead = false ;
 
       this.tiempo = Date.now();
+      this.relojColisiones = Date.now();
     }
 
     initAudio(){
@@ -281,7 +283,7 @@ class MyScene extends THREE.Scene {
     onKeyPressed () {
       var tecla = event.which || event.keyCode ;
       var letra = String.fromCharCode(tecla);
-      if(this.partida == MyScene.STARTED){
+      if(this.partida == MyScene.STARTED && this.estado == MyScene.IDLE){
         if(letra.toUpperCase() == "W" && this.saltos != MyScene.NOTFORWARD){
           if(this.model3.position.x % 5 == 0){
             this.model3.rotation.y = Math.PI/2;
@@ -317,6 +319,7 @@ class MyScene extends THREE.Scene {
     else if (this.partida == MyScene.NOTSTARTED){
       if(letra.toUpperCase() == " "){
         this.partida = MyScene.STARTED;
+        this.estado = MyScene.IDLE;
         document.getElementById("init").style.display = "none";
         document.getElementById("gameover").style.display = "none";
         this.nuevaPartida();
@@ -327,7 +330,7 @@ class MyScene extends THREE.Scene {
     onKeyDown () {
       var tecla = event.which || event.keyCode ;
       var letra = String.fromCharCode(tecla);
-      if(this.partida == MyScene.STARTED){
+      if(this.partida == MyScene.STARTED && this.estado == MyScene.IDLE){
         if(tecla == 38 && this.saltos != MyScene.NOTFORWARD){
           if(this.model3.position.x % 5 == 0){
             this.model3.rotation.y = Math.PI/2;
@@ -363,6 +366,7 @@ class MyScene extends THREE.Scene {
     else if (this.partida == MyScene.NOTSTARTED){
       if(letra.toUpperCase() == " "){
         this.partida = MyScene.STARTED;
+        this.estado = MyScene.IDLE;
         document.getElementById("init").style.display = "none";
         document.getElementById("gameover").style.display = "none";
         this.nuevaPartida();
@@ -472,23 +476,26 @@ class MyScene extends THREE.Scene {
     rayCaster.push(new THREE.Raycaster(posicionPersonaje, new THREE.Vector3(0,0,-1),0,2));
     rayCaster.push(new THREE.Raycaster(posicionPersonaje, new THREE.Vector3(1,0,0),0,2));
     rayCaster.push(new THREE.Raycaster(posicionPersonaje, new THREE.Vector3(-1,0,0),0,2));
-    var rayGeom = new THREE.Geometry();
     var obstaculos = this.getObstaculos();
     var armas = this.getTrampas();
     for(let rayo = 0 ; rayo < rayCaster.length ; rayo++){
       if (rayo == 0) rayCaster[rayo].far = 5 ;
       else rayCaster[rayo].far = 1 ;
-      var intersecciones = rayCaster[rayo].intersectObjects(armas,true);
-      if (intersecciones.length > 0){
-        this.estado = MyScene.DEATH;
+      for (let i=0 ; i<armas.length && this.estado != MyScene.DEATH ; i++){
+        var intersecciones = rayCaster[rayo].intersectObjects(armas,true);
+        if (intersecciones.length > 0){
+          this.estado = MyScene.DEATH;
+        }
       }
-      else{
+      if (this.estado != MyScene.DEATH){
         rayCaster[rayo].far = 5 ;
-        intersecciones = rayCaster[rayo].intersectObjects(obstaculos,true);
+        for (let i=0 ; i<obstaculos.length ; i++){
+        var intersecciones = rayCaster[rayo].intersectObject(obstaculos[i],true);
         if (intersecciones.length > 0){
           switch (rayo) {
             case 3:
               changed = true;
+              if (this.saltos == MyScene.NOTSIDES) this.saltos = MyScene.LOCKED;
               this.saltos = MyScene.NOTFORWARD;
               break;
 
@@ -511,8 +518,11 @@ class MyScene extends THREE.Scene {
         }
       }
     }
+  }
     if (!changed) this.saltos = MyScene.IDLE;
+    this.relojColisiones = Date.now();
     }
+
 
   getObstaculos(){
     return this.model2.getObstaculos();
@@ -544,6 +554,7 @@ class MyScene extends THREE.Scene {
    MyScene.NOTRIGHT = 7;
    MyScene.NOTLEFT = 11;
    MyScene.NOTSIDES = 12;
+   MyScene.LOCKED = 13;
   
   /// La función   main
   $(function () {
