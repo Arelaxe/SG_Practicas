@@ -1,14 +1,14 @@
-class Coche extends THREE.Object3D{
+class CochePeque extends THREE.Object3D{
     constructor(){
         super();
         var that = this ;
         var materialLoader = new THREE.MTLLoader();
         var objectLoader = new THREE.OBJLoader();
 
-        materialLoader.load('models/coche/coche.mtl',
+        materialLoader.load('models/coche_peque/coche_peque.mtl',
             function(material){
                 objectLoader.setMaterials(material);
-                objectLoader.load('models/coche/coche.obj',
+                objectLoader.load('models/coche_peque/coche_peque.obj',
                 function(objeto){
                     var modelo = objeto ;
                     //Collider
@@ -35,13 +35,12 @@ class Coche extends THREE.Object3D{
             
                 });
             });
-        
-        this.scale.x = 0.1;
-        this.scale.y = 0.1;
-        this.scale.z = 0.1;
-        this.position.y = 1.0;
-        this.velocidad = 50;
-        this.desaparicion = 2.5;
+            this.scale.x = 0.1;
+            this.scale.y = 0.1;
+            this.scale.z = 0.1;
+            this.position.y = 1.0;
+            this.velocidad = 80;
+            this.desaparicion = 1.5;
     }
 
     update(){

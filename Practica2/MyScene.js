@@ -60,7 +60,6 @@ class MyScene extends THREE.Scene {
       this.remove(this.camera);
       this.model2 = new EscenarioDinamico(7);
       this.model3 = new Personaje();
-      //this.add (this.model);
       this.add (this.model2);
       this.add (this.model3);
       this.setMessage(this.puntuacion);
@@ -243,6 +242,11 @@ class MyScene extends THREE.Scene {
 
       this.stats.begin();
 
+      TWEEN.update();
+      this.model2.update();
+      this.checkCollisions();
+      this.aplastar();
+
       // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
       var tiempo_actual = Date.now();
       var segs = (tiempo_actual-this.tiempo_camara)/1000;
@@ -268,11 +272,7 @@ class MyScene extends THREE.Scene {
       
       // Se actualiza el resto del modelo
       //this.model.update();
-      this.model2.update();
-      this.checkCollisions();
-      this.aplastar();
-
-      TWEEN.update();
+     
 
       this.stats.end();
       
@@ -480,12 +480,6 @@ class MyScene extends THREE.Scene {
       else rayCaster[rayo].far = 1 ;
       var intersecciones = rayCaster[rayo].intersectObjects(armas,true);
       if (intersecciones.length > 0){
-        /*rayGeom.vertices.push(posicionPersonaje);
-        rayGeom.vertices.push(intersecciones[0].point);
-  
-        this.remove(line);
-        var line = new THREE.Line(rayGeom,new THREE.LineBasicMaterial({color:0x00ffbb}));
-        this.add(line);*/
         this.estado = MyScene.DEATH;
       }
       else{
