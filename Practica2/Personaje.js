@@ -20,7 +20,7 @@ constructor(){
                 var bb = bounding.geometry.boundingBox;
                 var geomCollider = new THREE.BoxBufferGeometry(bb.max.x-bb.min.x,bb.max.y-bb.min.y,bb.max.z-bb.min.z);
                 geomCollider.translate(0,0,-0.5);
-                var matCollider = new THREE.MeshPhongMaterial({color:0xabc, transparent:true, opacity:0.5});
+                var matCollider = new THREE.MeshPhongMaterial({color:0xabc, transparent:true, opacity:0.0});
                 var collider = new THREE.Mesh(geomCollider,matCollider);
                 collider.add(modelo);
                 that.add(collider);

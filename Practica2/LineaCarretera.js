@@ -3,6 +3,7 @@
       super();
   
       this.linea = this.createLinea(num_linea);
+      this.garaje = new Garaje();
       this.trampas = [];
 
       this.add(this.linea);
@@ -36,16 +37,16 @@
 
       if (val > 99500 && !this.hay_coche){
         if (val <= 99625){
-          this.coche = new Coche();
+          this.coche = this.garaje.sacarCoche();
         }
         else if (val > 99625 && val <= 99750){
-          this.coche = new CochePeque();
+          this.coche = this.garaje.sacarCochePeque();
         }
         else if (val > 99750 && val <= 99875){
-          this.coche = new Furgoneta();
+          this.coche = this.garaje.sacarBus();
         }
         else if (val > 99875){
-          this.coche = new Autobus();
+          this.coche = this.garaje.sacarFurgoneta();
           
         }
 
@@ -66,7 +67,7 @@
         this.contador_coche = Date.now();
         this.tiempo_anterior = Date.now();
         this.hay_coche = true; 
-        this.trampas.push(this.coche);
+        this.trampas.push(this.coche.getCollider());
       }
 
       if(this.hay_coche){
@@ -82,6 +83,10 @@
         }
 
         if(tiempo_coche > this.coche.desaparicion){
+          if (this.coche.isCoche) this.garaje.meterCoche(this.coche);
+          else if (this.coche.isPeque) this.garaje.meterCochePeque(this.coche);
+          else if (this.coche.isAutobus) this.garaje.meterBus(this.coche);
+          else if (this.coche.isFurgoneta) this.garaje.meterFurgoneta(this.coche);
           this.remove(this.coche);
           this.hay_coche = false;
         }

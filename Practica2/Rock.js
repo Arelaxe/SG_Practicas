@@ -6,7 +6,7 @@ class Rock extends THREE.Object3D{
         var materialLoader = new THREE.MTLLoader();
         var objectLoader = new THREE.OBJLoader();
 
-        this.canKill = false ;
+        this.collider = new THREE.Mesh() ;
 
         materialLoader.load('models/rock/Stone.png',
             function(material){
@@ -20,10 +20,11 @@ class Rock extends THREE.Object3D{
                     var bb = bounding.geometry.boundingBox;
                     var geomCollider = new THREE.BoxBufferGeometry(bb.max.x-bb.min.x,bb.max.y-bb.min.y,bb.max.z-bb.min.z);
                     geomCollider.translate(0.3,0,0)
-                    var matCollider = new THREE.MeshPhongMaterial({color:0xaaaaaa, transparent:true, opacity:0.5});
-                    var collider = new THREE.Mesh(geomCollider,matCollider);
-                    collider.add(modelo);
-                    that.add(collider);
+                    var matCollider = new THREE.MeshPhongMaterial({color:0xaaaaaa, transparent:true, opacity:0.0});
+                    that.collider.geometry = geomCollider;
+                    that.collider.material = matCollider ;
+                    that.collider.add(modelo);
+                    that.add(that.collider);
                 },
                 // called when loading is iporsche911n progresses
                 function ( xhr ) {
@@ -38,6 +39,10 @@ class Rock extends THREE.Object3D{
             
                 });
             });
+    }
+
+    getCollider(){
+        return this.collider;
     }
 
     update(){

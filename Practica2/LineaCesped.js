@@ -2,7 +2,11 @@ class LineaCesped extends THREE.Object3D {
     constructor(num_linea) {
       super();
 
-      this.obstaculos = [];  
+      this.obstaculos = [];
+      this.arboles = [];
+      this.rocas = [];  
+      this.jardin = new Jardin();
+
       this.linea = this.createLinea(num_linea);
 
 
@@ -21,7 +25,7 @@ class LineaCesped extends THREE.Object3D {
           var obstaculo = Math.random() * (10 - 0) + 0;
 
           if (obstaculo <= 1){
-              var arbol = new Arbol();
+              var arbol = this.jardin.sacarArbol();
               arbol.scale.x = 1.5;
               arbol.scale.y = 1.5;
               arbol.scale.z = 1.5;
@@ -29,11 +33,11 @@ class LineaCesped extends THREE.Object3D {
               arbol.position.z = i*5;
               arbol.position.x = 5*num_linea;
               this.add(arbol);
-              this.obstaculos.push(arbol);
+              this.obstaculos.push(arbol.getCollider());
           }
 
           if (obstaculo > 1 && obstaculo <= 2){
-              var rock = new Rock();
+              var rock = this.jardin.sacarRoca();
               rock.scale.x = 1.75;
               rock.scale.y = 1.75;
               rock.scale.z = 1.75;
@@ -41,7 +45,7 @@ class LineaCesped extends THREE.Object3D {
               rock.position.z = i*5;
               rock.position.x = 5*num_linea;
               this.add(rock);
-              this.obstaculos.push(rock);
+              this.obstaculos.push(rock.getCollider());
           }
             
         }
@@ -55,6 +59,11 @@ class LineaCesped extends THREE.Object3D {
 
     getTrampas(){
       return [];
+    }
+
+    recoger(){
+      for (let i=0 ; i<this.arboles.length ; i++) this.jardin.meterArbol(this.arboles[i]);
+      for (let i=0 ; i<this.rocas.length ; i++) this.jardin.meterRoca(this.rocas[i]);
     }
     
     update () {

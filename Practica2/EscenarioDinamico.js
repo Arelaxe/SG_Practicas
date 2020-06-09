@@ -62,6 +62,7 @@ class EscenarioDinamico extends THREE.Object3D {
         var tiempo_actual = new Date ();
         if ((tiempo_actual-this.tiempo_borrar) > 2000){
             this.tiempo_borrar = new Date();
+            if (this.escenario.children[0] instanceof LineaCesped) this.escenario.children[0].recoger();
             this.escenario.remove(this.escenario.children[0]); 
             this.num_lineas--;         
         }

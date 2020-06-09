@@ -1,9 +1,12 @@
 class Autobus extends THREE.Object3D{
     constructor(){
         super();
+        this.esAutobus = true;
         var that = this ;
         var materialLoader = new THREE.MTLLoader();
         var objectLoader = new THREE.OBJLoader();
+
+        this.collider = new THREE.Mesh();
 
         materialLoader.load('models/bus/bus.mtl',
             function(material){
@@ -18,10 +21,11 @@ class Autobus extends THREE.Object3D{
                     var bb = bounding.geometry.boundingBox;
                     var geomCollider = new THREE.BoxBufferGeometry(bb.max.x-bb.min.x,bb.max.y-bb.min.y,bb.max.z-bb.min.z);
                     geomCollider.translate(13.5,15,-5.5);
-                    var matCollider = new THREE.MeshPhongMaterial({color:0xbb0000, transparent:true, opacity:0.5});
-                    var collider = new THREE.Mesh(geomCollider,matCollider);
-                    collider.add(modelo);
-                    that.add(collider);
+                    var matCollider = new THREE.MeshPhongMaterial({color:0xbb0000, transparent:true, opacity:0.0});
+                    that.collider.geometry = geomCollider;
+                    that.collider.material = matCollider ;
+                    that.collider.add(modelo);
+                    that.add(that.collider);
                 },
                 // called when loading is iporsche911n progresses
                 function ( xhr ) {
@@ -36,13 +40,17 @@ class Autobus extends THREE.Object3D{
             
                 });
             });
-        
+    
         this.scale.x = 0.08;
         this.scale.y = 0.08;
         this.scale.z = 0.08;
         this.position.y = 1.0;
         this.velocidad = 30;
         this.desaparicion = 4.0;
+    }
+
+    getCollider(){
+        return this.collider;
     }
 
     update(){

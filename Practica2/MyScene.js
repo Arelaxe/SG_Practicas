@@ -482,7 +482,7 @@ class MyScene extends THREE.Scene {
       if (rayo == 0) rayCaster[rayo].far = 5 ;
       else rayCaster[rayo].far = 1 ;
       for (let i=0 ; i<armas.length && this.estado != MyScene.DEATH ; i++){
-        var intersecciones = rayCaster[rayo].intersectObjects(armas,true);
+        var intersecciones = rayCaster[rayo].intersectObject(armas[i],false);
         if (intersecciones.length > 0){
           this.estado = MyScene.DEATH;
         }
@@ -490,7 +490,7 @@ class MyScene extends THREE.Scene {
       if (this.estado != MyScene.DEATH){
         rayCaster[rayo].far = 5 ;
         for (let i=0 ; i<obstaculos.length ; i++){
-        var intersecciones = rayCaster[rayo].intersectObject(obstaculos[i],true);
+        var intersecciones = rayCaster[rayo].intersectObject(obstaculos[i],false);
         if (intersecciones.length > 0){
           switch (rayo) {
             case 3:
