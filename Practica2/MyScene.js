@@ -41,7 +41,6 @@ class MyScene extends THREE.Scene {
       this.direccion = MyScene.IDLE ;
       this.saltos = MyScene.IDLE ;
       this.partida = MyScene.NOTSTARTED;
-      this.dead = false ;
 
       this.stats.showPanel(0) ;
       document.body.appendChild( this.stats.dom );
@@ -73,7 +72,6 @@ class MyScene extends THREE.Scene {
       
       this.estado = MyScene.IDLE ;
       this.direccion = MyScene.UP ;
-      this.dead = false ;
 
       this.tiempo = Date.now();
       this.relojColisiones = Date.now();
@@ -377,7 +375,6 @@ class MyScene extends THREE.Scene {
 
   aplastar(){
     if (this.estado == MyScene.DEATH){
-      this.dead = true;
       this.personaje.scale.y = 0.01;
       this.personaje.position.y = 0.3;
       this.estado = MyScene.DEAD;

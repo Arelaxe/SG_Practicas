@@ -14,6 +14,7 @@ constructor(){
                 var modelo = objeto ;
                 objeto.children[0].material.map.anisotropy = 16 ;
                 objeto.children[0].material.map.minFilter = THREE.LinearFilter;
+                objeto.children[0].material.side = THREE.DoubleSide;
                 //Collider
                 var bounding = new THREE.BoxHelper(modelo);
                 bounding.geometry.computeBoundingBox();
@@ -27,22 +28,5 @@ constructor(){
                 that.add(collider);
             },null,null);
         }); 
-        
-        this.anterior = Date.now() ;
-}
-
-aplastarY(reloj,tiempototal){
-    var time = reloj.getDelta()  ;
-    if(reloj.getElapsedTime()<tiempototal){
-        this.scale.y = this.scale.y - time/tiempototal ;
-        this.position.y -= 2*time/tiempototal; 
-    }
-}
-
-aplastarZ(reloj,tiempototal){
-    var time = reloj.getDelta()  ;
-    if(reloj.getElapsedTime()<tiempototal){
-        this.scale.z = this.scale.z - time/tiempototal ;
-    }
 }
 }
