@@ -24,19 +24,7 @@ constructor(){
                 var collider = new THREE.Mesh(geomCollider,matCollider);
                 collider.add(modelo);
                 that.add(collider);
-            },
-            // called when loading is in progresses
-            function ( xhr ) {
-        
-                console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-        
-            },
-            // called when loading has errors
-            function ( error ) {
-        
-                console.log( 'An error happened' );
-        
-            });
+            },null,null);
         }); 
         
         this.anterior = Date.now() ;

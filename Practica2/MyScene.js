@@ -111,18 +111,7 @@ class MyScene extends THREE.Scene {
  
          // play the audio
          sonido.play();
-       },
- 
-       // onProgress callback
-       function ( xhr ) {
-         console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-       },
- 
-       // onError callback
-       function ( err ) {
-         console.log( 'An error happened' );
-       }
-     );
+       },null,null);
     }
 
 
@@ -247,11 +236,6 @@ class MyScene extends THREE.Scene {
 
       this.stats.begin();
 
-      TWEEN.update();
-      this.model2.update();
-      this.checkCollisions();
-      this.aplastar();
-
       // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
       var tiempo_actual = Date.now();
       var segs = (tiempo_actual-this.tiempo_camara)/1000;
@@ -267,6 +251,10 @@ class MyScene extends THREE.Scene {
 
       // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
       this.renderer.render (this, this.getCamera());
+      TWEEN.update();
+      this.model2.update();
+      this.checkCollisions();
+      this.aplastar();
       if (this.model2.num_linea_actual*5 <= this.model3.position.x){
         this.estado = MyScene.DEATH;
       }
@@ -283,7 +271,7 @@ class MyScene extends THREE.Scene {
       var tecla = event.which || event.keyCode ;
       var letra = String.fromCharCode(tecla);
       if(this.partida == MyScene.STARTED && this.estado == MyScene.IDLE){
-        if(letra.toUpperCase() == "W" && this.saltos != MyScene.NOTFORWARD){
+        if(letra.toUpperCase() == "W" && (this.saltos == MyScene.IDLE || this.saltos == MyScene.NOTSIDES || this.saltos == MyScene.NOTLEFT || this.saltos == MyScene.NOTRIGHT)){
           if(this.model3.position.x % 5 == 0){
             this.model3.rotation.y = Math.PI/2;
             this.direccion = MyScene.UP;
@@ -293,7 +281,7 @@ class MyScene extends THREE.Scene {
             this.setMessage(this.puntuacion);
           }
         }
-        if(letra.toUpperCase() == "A" && this.saltos != MyScene.NOTLEFT && this.saltos != MyScene.NOTSIDES){
+        if(letra.toUpperCase() == "A" && (this.saltos == MyScene.IDLE || this.saltos == MyScene.ONLYLEFT || this.saltos == MyScene.NOTFORWARD || this.saltos == MyScene.NOTRIGHT )){
           if(this.model3.position.z % 5 == 0){
             this.model3.rotation.y = Math.PI;
             this.direccion = MyScene.LEFT;
@@ -301,7 +289,7 @@ class MyScene extends THREE.Scene {
             this.posz -= 5;
           }
         }
-        if(letra.toUpperCase() == "D" && this.saltos != MyScene.NOTRIGHT && this.saltos != MyScene.NOTSIDES){
+        if(letra.toUpperCase() == "D" && (this.saltos == MyScene.IDLE || this.saltos == MyScene.ONLYRIGHT || this.saltos == MyScene.NOTFORWARD || this.saltos == MyScene.NOTLEFT)){
           if(this.model3.position.z % 5 == 0){
             this.model3.rotation.y = 0;
             this.salto_derecha();
@@ -330,7 +318,7 @@ class MyScene extends THREE.Scene {
       var tecla = event.which || event.keyCode ;
       var letra = String.fromCharCode(tecla);
       if(this.partida == MyScene.STARTED && this.estado == MyScene.IDLE){
-        if(tecla == 38 && this.saltos != MyScene.NOTFORWARD){
+        if(tecla == 38 && (this.saltos == MyScene.IDLE || this.saltos == MyScene.NOTSIDES || this.saltos == MyScene.NOTLEFT || this.saltos == MyScene.NOTRIGHT)){
           if(this.model3.position.x % 5 == 0){
             this.model3.rotation.y = Math.PI/2;
             this.direccion = MyScene.UP;
@@ -340,7 +328,7 @@ class MyScene extends THREE.Scene {
             this.setMessage(this.puntuacion);
           }
         }
-        if(tecla == 37 && this.saltos != MyScene.NOTLEFT && this.saltos != MyScene.NOTSIDES){
+        if(tecla == 37 && (this.saltos == MyScene.IDLE || this.saltos == MyScene.ONLYLEFT || this.saltos == MyScene.NOTFORWARD || this.saltos == MyScene.NOTRIGHT)){
           if(this.model3.position.z % 5 == 0){
             this.model3.rotation.y = Math.PI;
             this.direccion = MyScene.LEFT;
@@ -348,7 +336,7 @@ class MyScene extends THREE.Scene {
             this.posz -= 5;
           }
         }
-        if(tecla == 39 && this.saltos != MyScene.NOTRIGHT && this.saltos != MyScene.NOTSIDES){
+        if(tecla == 39 && (this.saltos == MyScene.IDLE || this.saltos == MyScene.ONLYRIGHT || this.saltos == MyScene.NOTFORWARD || this.saltos == MyScene.NOTLEFT)){
           if(this.model3.position.z % 5 == 0){
             this.model3.rotation.y = 0;
             this.salto_derecha();
@@ -484,12 +472,19 @@ class MyScene extends THREE.Scene {
             case 3:
               changed = true;
               if (this.saltos == MyScene.NOTSIDES) this.saltos = MyScene.LOCKED;
-              this.saltos = MyScene.NOTFORWARD;
+              else if (this.saltos == MyScene.NOTLEFT) this.saltos = MyScene.ONLYRIGHT;
+              else if (this.saltos == MyScene.NOTRIGHT) this.saltos = MyScene.ONLYLEFT;
+              else if (this.saltos == MyScene.IDLE) this.saltos = MyScene.NOTFORWARD;
               break;
 
             case 1:
               changed = true;
-              this.saltos = MyScene.NOTRIGHT;
+              if(this.saltos == MyScene.NOTLEFT){
+                this.saltos = MyScene.NOTSIDES;
+              }
+              else if (this.saltos == MyScene.ONLYRIGHT) this.saltos = MyScene.LOCKED ;
+              else if (this.saltos == MyScene.NOTFORWARD) this.saltos = MyScene.ONLYLEFT ;
+              else if (this.saltos == MyScene.IDLE) this.saltos = MyScene.NOTRIGHT;
             break;
 
             case 2:
@@ -497,7 +492,9 @@ class MyScene extends THREE.Scene {
               if(this.saltos == MyScene.NOTRIGHT){
                 this.saltos = MyScene.NOTSIDES;
               }
-              else this.saltos = MyScene.NOTLEFT;
+              else if (this.saltos == MyScene.ONLYLEFT) this.saltos = MyScene.LOCKED ;
+              else if (this.saltos == MyScene.NOTFORWARD) this.saltos = MyScene.ONLYRIGHT ;
+              else if (this.saltos == MyScene.IDLE) this.saltos = MyScene.NOTLEFT;
             break;
           
             default:
@@ -543,6 +540,8 @@ class MyScene extends THREE.Scene {
    MyScene.NOTLEFT = 11;
    MyScene.NOTSIDES = 12;
    MyScene.LOCKED = 13;
+   MyScene.ONLYRIGHT = 14;
+   MyScene.ONLYLEFT = 15;
   
   /// La función   main
   $(function () {

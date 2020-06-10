@@ -27,19 +27,7 @@ class Coche extends THREE.Object3D{
                     that.collider.material = matCollider ;
                     that.collider.add(modelo);
                     that.add(that.collider);
-                },
-                // called when loading is iporsche911n progresses
-                function ( xhr ) {
-            
-                    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-            
-                },
-                // called when loading has errors
-                function ( error ) {
-            
-                    console.log( 'An error happened' );
-            
-                });
+                },null,null);
             });
         
         this.scale.x = 0.1;
