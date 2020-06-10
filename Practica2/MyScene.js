@@ -103,6 +103,7 @@ class MyScene extends THREE.Scene {
          // set the audio object buffer to the loaded object
          sonido.setBuffer( audioBuffer );
          sonido.setVolume(0.25);
+         sonido.setLoop(true);
  
          // play the audio
          sonido.play();
