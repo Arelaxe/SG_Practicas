@@ -14,9 +14,6 @@ class MyScene extends THREE.Scene {
       // Lo primero, crear el visualizador, pasándole el lienzo sobre el que realizar los renderizados.
       this.renderer = this.createRenderer(myCanvas);
       
-      // Se añade a la gui los controles para manipular los elementos de esta clase
-      this.gui = this.createGUI ();
-      
       // Construimos los distinos elementos que tendremos en la escena
       
       // Todo elemento que se desee sea tenido en cuenta en el renderizado de la escena debe pertenecer a esta. Bien como hijo de la escena (this en esta clase) o como hijo de un elemento que ya esté en la escena.
@@ -27,18 +24,18 @@ class MyScene extends THREE.Scene {
       this.createCamera ();
      
       this.puntuacion = 0;
-      this.model2 = new EscenarioDinamico(12,this.garaje,this.jardin);
-      this.model3 = new Personaje();
+      this.escenario = new EscenarioDinamico(12,25,this.garaje,this.jardin);
+      this.personaje = new Personaje();
       //this.add (this.model);
-      this.add (this.model2);
-      this.add (this.model3);
+      this.add (this.escenario);
+      this.add (this.personaje);
       this.setMessage(this.puntuacion);
       this.stats = new Stats();
 
-      this.model3.position.y = 2.20;
-      this.model3.position.z = 60;
-      this.model3.position.x = -5;
-      this.model3.rotateY(Math.PI/2);
+      this.personaje.position.y = 2.20;
+      this.personaje.position.z = 60;
+      this.personaje.position.x = -5;
+      this.personaje.rotateY(Math.PI/2);
       
       this.estado = MyScene.IDLE ;
       this.direccion = MyScene.IDLE ;
@@ -59,20 +56,20 @@ class MyScene extends THREE.Scene {
       this.posx = -5;
       this.posy = 2.20;
       this.posz = 60;
-      this.remove(this.model3);
-      this.remove(this.model2);
+      this.remove(this.personaje);
+      this.remove(this.escenario);
       this.remove(this.camera);
-      this.model2 = new EscenarioDinamico(12,this.garaje,this.jardin);
-      this.model3 = new Personaje();
-      this.add (this.model2);
-      this.add (this.model3);
+      this.escenario = new EscenarioDinamico(12,25,this.garaje,this.jardin);
+      this.personaje = new Personaje();
+      this.add (this.escenario);
+      this.add (this.personaje);
       this.setMessage(this.puntuacion);
       this.createCamera ();
 
-      this.model3.position.y = 2.20;
-      this.model3.position.z = 60;
-      this.model3.position.x = -5;
-      this.model3.rotateY(Math.PI/2);
+      this.personaje.position.y = 2.20;
+      this.personaje.position.z = 60;
+      this.personaje.position.x = -5;
+      this.personaje.rotateY(Math.PI/2);
       
       this.estado = MyScene.IDLE ;
       this.direccion = MyScene.UP ;
@@ -130,57 +127,6 @@ class MyScene extends THREE.Scene {
       this.camera.lookAt(look);
       this.add (this.camera);
       this.tiempo_camara = Date.now();
-      
-      // Para el control de cámara usamos una clase que ya tiene implementado los movimientos de órbita
-      this.cameraControl = new THREE.TrackballControls (this.camera, this.renderer.domElement);
-      // Se configuran las velocidades de los movimientos
-      this.cameraControl.rotateSpeed = 5;
-      this.cameraControl.zoomSpeed = -2;
-      this.cameraControl.panSpeed = 0.5;
-      // Debe orbitar con respecto al punto de mira de la cámara
-      this.cameraControl.target = look;
-    }
-    
-    createGround () {
-      // El suelo es un Mesh, necesita una geometría y un material.
-      
-      // La geometría es una caja con muy poca altura
-      var geometryGround = new THREE.BoxGeometry (50,0.2,50);
-      
-      // El material se hará con una textura de madera
-      var texture = new THREE.TextureLoader().load('../imgs/wood.jpg');
-      var materialGround = new THREE.MeshPhongMaterial ({map: texture});
-      
-      // Ya se puede construir el Mesh
-      var ground = new THREE.Mesh (geometryGround, materialGround);
-      
-      // Todas las figuras se crean centradas en el origen.
-      // El suelo lo bajamos la mitad de su altura para que el origen del mundo se quede en su lado superior
-      ground.position.y = -0.1;
-      
-      // Que no se nos olvide añadirlo a la escena, que en este caso es  this
-      this.add (ground);
-    }
-    
-    createGUI () {
-      // Se crea la interfaz gráfica de usuario
-      var gui = new dat.GUI();
-      
-      // La escena le va a añadir sus propios controles. 
-      // Se definen mediante una   new function()
-      // En este caso la intensidad de la luz y si se muestran o no los ejes
-      this.guiControls = new function() {
-        // En el contexto de una función   this   alude a la función
-        this.lightIntensity = 0.8;
-      }
-  
-      // Se crea una sección para los controles de esta clase
-      var folder = gui.addFolder ('Luz y Ejes');
-      
-      // Se le añade un control para la intensidad de la luz
-      folder.add (this.guiControls, 'lightIntensity', 0, 1, 0.1).name('Intensidad de la Luz : ');
-      
-      return gui;
     }
     
     createLights () {
@@ -243,23 +189,25 @@ class MyScene extends THREE.Scene {
       this.lookx += segs*2.5;
       var look = new THREE.Vector3 (this.lookx,0,62.5);
       this.camera.lookAt(look);
-      this.cameraControl.target = look;
       this.camera.position.x += segs*2.5;
-      // Se actualiza la posición de la cámara según su controlador
-      this.cameraControl.update();
       this.tiempo_camara = tiempo_actual;
 
       // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
       this.renderer.render (this, this.getCamera());
       TWEEN.update();
-      this.model2.update();
+      this.escenario.update();
       this.checkCollisions();
       this.aplastar();
-      if (this.model2.num_linea_actual*5 <= this.model3.position.x){
+      if (this.escenario.num_linea_actual*5 <= this.personaje.position.x){
         this.estado = MyScene.DEATH;
       }
-
-      if ((this.model2.num_linea_actual-this.model2.num_lineas-4)*5 > this.model3.position.x){
+      if (this.partida == MyScene.STARTED){
+        if ((this.escenario.num_linea_actual-this.escenario.num_lineas-4)*5 > this.personaje.position.x){
+          this.estado = MyScene.DEATH;
+        }
+      }
+      
+      if (this.personaje.position.z < 0 || this.personaje.position.z >= 25*5){
         this.estado = MyScene.DEATH;
       }
 
@@ -272,8 +220,8 @@ class MyScene extends THREE.Scene {
       var letra = String.fromCharCode(tecla);
       if(this.partida == MyScene.STARTED && this.estado == MyScene.IDLE){
         if(letra.toUpperCase() == "W" && (this.saltos == MyScene.IDLE || this.saltos == MyScene.NOTSIDES || this.saltos == MyScene.NOTLEFT || this.saltos == MyScene.NOTRIGHT)){
-          if(this.model3.position.x % 5 == 0){
-            this.model3.rotation.y = Math.PI/2;
+          if(this.personaje.position.x % 5 == 0){
+            this.personaje.rotation.y = Math.PI/2;
             this.direccion = MyScene.UP;
             this.puntuacion++;
             this.salto_adelante();
@@ -282,16 +230,16 @@ class MyScene extends THREE.Scene {
           }
         }
         if(letra.toUpperCase() == "A" && (this.saltos == MyScene.IDLE || this.saltos == MyScene.ONLYLEFT || this.saltos == MyScene.NOTFORWARD || this.saltos == MyScene.NOTRIGHT )){
-          if(this.model3.position.z % 5 == 0){
-            this.model3.rotation.y = Math.PI;
+          if(this.personaje.position.z % 5 == 0){
+            this.personaje.rotation.y = Math.PI;
             this.direccion = MyScene.LEFT;
             this.salto_izquierda();
             this.posz -= 5;
           }
         }
         if(letra.toUpperCase() == "D" && (this.saltos == MyScene.IDLE || this.saltos == MyScene.ONLYRIGHT || this.saltos == MyScene.NOTFORWARD || this.saltos == MyScene.NOTLEFT)){
-          if(this.model3.position.z % 5 == 0){
-            this.model3.rotation.y = 0;
+          if(this.personaje.position.z % 5 == 0){
+            this.personaje.rotation.y = 0;
             this.salto_derecha();
             this.posz += 5;
             this.direccion = MyScene.RIGHT;
@@ -319,8 +267,8 @@ class MyScene extends THREE.Scene {
       var letra = String.fromCharCode(tecla);
       if(this.partida == MyScene.STARTED && this.estado == MyScene.IDLE){
         if(tecla == 38 && (this.saltos == MyScene.IDLE || this.saltos == MyScene.NOTSIDES || this.saltos == MyScene.NOTLEFT || this.saltos == MyScene.NOTRIGHT)){
-          if(this.model3.position.x % 5 == 0){
-            this.model3.rotation.y = Math.PI/2;
+          if(this.personaje.position.x % 5 == 0){
+            this.personaje.rotation.y = Math.PI/2;
             this.direccion = MyScene.UP;
             this.puntuacion++;
             this.salto_adelante();
@@ -329,16 +277,16 @@ class MyScene extends THREE.Scene {
           }
         }
         if(tecla == 37 && (this.saltos == MyScene.IDLE || this.saltos == MyScene.ONLYLEFT || this.saltos == MyScene.NOTFORWARD || this.saltos == MyScene.NOTRIGHT)){
-          if(this.model3.position.z % 5 == 0){
-            this.model3.rotation.y = Math.PI;
+          if(this.personaje.position.z % 5 == 0){
+            this.personaje.rotation.y = Math.PI;
             this.direccion = MyScene.LEFT;
             this.salto_izquierda();
             this.posz -= 5;
           }
         }
         if(tecla == 39 && (this.saltos == MyScene.IDLE || this.saltos == MyScene.ONLYRIGHT || this.saltos == MyScene.NOTFORWARD || this.saltos == MyScene.NOTLEFT)){
-          if(this.model3.position.z % 5 == 0){
-            this.model3.rotation.y = 0;
+          if(this.personaje.position.z % 5 == 0){
+            this.personaje.rotation.y = 0;
             this.salto_derecha();
             this.posz += 5;
             this.direccion = MyScene.RIGHT;
@@ -372,12 +320,12 @@ class MyScene extends THREE.Scene {
       animacion2.easing(TWEEN.Easing.Quadratic.InOut);
       var that = this;
       animacion1.onUpdate(function(){
-        that.model3.position.x = origen.x;
-        that.model3.position.y = origen.y;
+        that.personaje.position.x = origen.x;
+        that.personaje.position.y = origen.y;
       });
       animacion2.onUpdate(function(){
-        that.model3.position.x = mitad.x;
-        that.model3.position.y = mitad.y;
+        that.personaje.position.x = mitad.x;
+        that.personaje.position.y = mitad.y;
       });
       animacion1.chain(animacion2);
       animacion1.start();
@@ -394,12 +342,12 @@ class MyScene extends THREE.Scene {
       animacion2.easing(TWEEN.Easing.Quadratic.InOut);
       var that = this;
       animacion1.onUpdate(function(){
-        that.model3.position.z = origen.z;
-        that.model3.position.y = origen.y;
+        that.personaje.position.z = origen.z;
+        that.personaje.position.y = origen.y;
       });
       animacion2.onUpdate(function(){
-        that.model3.position.z = mitad.z;
-        that.model3.position.y = mitad.y;
+        that.personaje.position.z = mitad.z;
+        that.personaje.position.y = mitad.y;
       });
       animacion1.chain(animacion2);
       animacion1.start();
@@ -416,12 +364,12 @@ class MyScene extends THREE.Scene {
       animacion2.easing(TWEEN.Easing.Quadratic.InOut);
       var that = this;
       animacion1.onUpdate(function(){
-        that.model3.position.z = origen.z;
-        that.model3.position.y = origen.y;
+        that.personaje.position.z = origen.z;
+        that.personaje.position.y = origen.y;
       });
       animacion2.onUpdate(function(){
-        that.model3.position.z = mitad.z;
-        that.model3.position.y = mitad.y;
+        that.personaje.position.z = mitad.z;
+        that.personaje.position.y = mitad.y;
       });
       animacion1.chain(animacion2);
       animacion1.start();
@@ -430,8 +378,8 @@ class MyScene extends THREE.Scene {
   aplastar(){
     if (this.estado == MyScene.DEATH){
       this.dead = true;
-      this.model3.scale.y = 0.01;
-      this.model3.position.y = 0.3;
+      this.personaje.scale.y = 0.01;
+      this.personaje.position.y = 0.3;
       this.estado = MyScene.DEAD;
       this.partida = MyScene.NOTSTARTED ;
       document.getElementById("gameover").style.display = "block";
@@ -444,7 +392,7 @@ class MyScene extends THREE.Scene {
   }
 
   checkCollisions(){
-    var posicionPersonaje = this.model3.position ;
+    var posicionPersonaje = this.personaje.position ;
     var rayCaster = [];
     var changed = false ;
     rayCaster.push(new THREE.Raycaster(posicionPersonaje, new THREE.Vector3(0,-1,0),0,5));
@@ -510,11 +458,11 @@ class MyScene extends THREE.Scene {
 
 
   getObstaculos(){
-    return this.model2.getObstaculos();
+    return this.escenario.getObstaculos();
   }
 
   getTrampas(){
-    return this.model2.getTrampas();
+    return this.escenario.getTrampas();
   }
 }
 

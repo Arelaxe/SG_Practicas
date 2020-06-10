@@ -1,12 +1,13 @@
 class EscenarioDinamico extends THREE.Object3D {
-    constructor(num_lineas,garaje,jardin) {
+    constructor(num_lineas,ancho_lineas,garaje,jardin) {
       super();
   
       this.obstaculos = [];
       this.trampas = [] ;
       this.garaje = garaje;
       this.jardin = jardin;
-      this.escenario = this.createEscenario(num_lineas,garaje,jardin);
+      this.ancho_lineas = ancho_lineas;
+      this.escenario = this.createEscenario(num_lineas);
       this.num_lineas = num_lineas;
 
       this.add(this.escenario);
@@ -15,31 +16,31 @@ class EscenarioDinamico extends THREE.Object3D {
     }
 
     
-    createEscenario(num_lineas,garaje,jardin){
+    createEscenario(num_lineas){
         var escenario = new THREE.Group();
 
         var linea;
 
-        linea = new LineaInicial(-4);
+        linea = new LineaInicial(-4,this.ancho_lineas);
         escenario.add(linea);
-        linea = new LineaInicial(-3);
+        linea = new LineaInicial(-3,this.ancho_lineas);
         escenario.add(linea);
-        linea = new LineaInicial(-2);
+        linea = new LineaInicial(-2,this.ancho_lineas);
         escenario.add(linea);
-        linea = new LineaInicial(-1);
+        linea = new LineaInicial(-1,this.ancho_lineas);
         escenario.add(linea);
 
         for (var i=0; i<num_lineas; i++){
             var tipo_linea = Math.random() * (3 - 0) + 0;
 
             if (tipo_linea >= 0 && tipo_linea < 1){
-                linea = new LineaAgua(i);
+                linea = new LineaAgua(i,this.ancho_lineas);
             }
             else if (tipo_linea >= 1 && tipo_linea < 2){
-                linea = new LineaCesped(i,this.jardin);
+                linea = new LineaCesped(i,this.ancho_lineas,this.jardin);
             }
             else{
-                linea = new LineaCarretera(i,this.garaje);
+                linea = new LineaCarretera(i,this.ancho_lineas,this.garaje);
 
             }
         
@@ -74,13 +75,13 @@ class EscenarioDinamico extends THREE.Object3D {
             var linea;
 
             if (tipo_linea >= 0 && tipo_linea < 1){
-                linea = new LineaAgua(this.num_linea_actual);
+                linea = new LineaAgua(this.num_linea_actual,this.ancho_lineas);
             }
             else if (tipo_linea >= 1 && tipo_linea < 2){
-                linea = new LineaCesped(this.num_linea_actual,this.jardin);
+                linea = new LineaCesped(this.num_linea_actual,this.ancho_lineas,this.jardin);
             }
             else{
-                linea = new LineaCarretera(this.num_linea_actual,this.garaje);
+                linea = new LineaCarretera(this.num_linea_actual,this.ancho_lineas,this.garaje);
             }
         
             this.num_linea_actual++;

@@ -1,5 +1,5 @@
 class LineaAgua extends THREE.Object3D {
-    constructor(num_linea) {
+    constructor(num_linea,ancho_linea) {
       super();
 
       var val = Math.random() * (10 - 0) + 0;
@@ -12,7 +12,7 @@ class LineaAgua extends THREE.Object3D {
       }
   
       this.trampas = [];
-      this.linea = this.createLinea(num_linea);
+      this.linea = this.createLinea(num_linea,ancho_linea);
 
       this.add(this.linea);
     }
@@ -26,10 +26,10 @@ class LineaAgua extends THREE.Object3D {
     }
 
     
-    createLinea(num_linea){
+    createLinea(num_linea,ancho_linea){
         var linea = new THREE.Group();
 
-        for (var i=0; i<25; i++){
+        for (var i=0; i<ancho_linea; i++){
           var transitable = Math.random() * (10 - 0) + 0;
 
           if(transitable <=5 ){

@@ -33,7 +33,7 @@ class CochePeque extends THREE.Object3D{
             this.scale.y = 0.1;
             this.scale.z = 0.1;
             this.position.y = 1.0;
-            this.velocidad = 80;
+            this.velocidad = 70;
             this.desaparicion = 1.5;
     }
 
