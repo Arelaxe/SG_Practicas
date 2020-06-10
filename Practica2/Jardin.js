@@ -4,6 +4,32 @@ class Jardin extends THREE.Object3D{
 
         this.arboles = [];
         this.rocas = [];
+
+        this.precargar();
+    }
+
+    precargar(){
+        //Vamos a dejar ya en los buffers unas cuantas rocas y árboles.
+        this.arboles.push(new Arbol());
+        this.arboles.push(new Arbol());
+        this.arboles.push(new Arbol());
+        this.arboles.push(new Arbol());
+        this.arboles.push(new Arbol());
+        this.arboles.push(new Arbol());
+        this.arboles.push(new Arbol());
+        this.arboles.push(new Arbol());
+        this.arboles.push(new Arbol());
+        this.arboles.push(new Arbol());
+        this.rocas.push(new Rock());
+        this.rocas.push(new Rock());
+        this.rocas.push(new Rock());
+        this.rocas.push(new Rock());
+        this.rocas.push(new Rock());
+        this.rocas.push(new Rock());
+        this.rocas.push(new Rock());
+        this.rocas.push(new Rock());
+        this.rocas.push(new Rock());
+        this.rocas.push(new Rock());
     }
 
     sacarArbol(){

@@ -1,11 +1,11 @@
 class LineaCesped extends THREE.Object3D {
-    constructor(num_linea) {
+    constructor(num_linea,jardin) {
       super();
 
       this.obstaculos = [];
       this.arboles = [];
       this.rocas = [];  
-      this.jardin = new Jardin();
+      this.jardin = jardin ;
 
       this.linea = this.createLinea(num_linea);
 
@@ -14,7 +14,7 @@ class LineaCesped extends THREE.Object3D {
     }
 
     
-    createLinea(num_linea){
+    createLinea(num_linea,jardin){
         var linea = new THREE.Group();
 
         for (var i=0; i<25; i++){

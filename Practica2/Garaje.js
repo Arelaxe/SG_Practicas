@@ -6,6 +6,24 @@ class Garaje extends THREE.Object3D{
         this.cochespequenos = [];
         this.furgonetas = [];
         this.autobuses = [] ;
+
+        this.precargar();
+    }
+
+    precargar(){
+        // Vamos a dejar en el garaje ya unos cuantos coches de cada tipo para que la carga dinámica sea menor.
+        this.coches.push(new Coche());
+        this.coches.push(new Coche());
+        this.coches.push(new Coche());
+        this.cochespequenos.push(new CochePeque());
+        this.cochespequenos.push(new CochePeque());
+        this.cochespequenos.push(new CochePeque());
+        this.furgonetas.push(new Furgoneta());
+        this.furgonetas.push(new Furgoneta());
+        this.furgonetas.push(new Furgoneta());
+        this.autobuses.push(new Autobus());
+        this.autobuses.push(new Autobus());
+        this.autobuses.push(new Autobus());
     }
 
     sacarCoche(){

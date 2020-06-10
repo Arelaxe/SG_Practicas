@@ -7,6 +7,9 @@
 class MyScene extends THREE.Scene {
     constructor (myCanvas) {
       super();
+
+      this.garaje = new Garaje();
+      this.jardin = new Jardin();
       
       // Lo primero, crear el visualizador, pasándole el lienzo sobre el que realizar los renderizados.
       this.renderer = this.createRenderer(myCanvas);
@@ -24,7 +27,7 @@ class MyScene extends THREE.Scene {
       this.createCamera ();
      
       this.puntuacion = 0;
-      this.model2 = new EscenarioDinamico(12);
+      this.model2 = new EscenarioDinamico(12,this.garaje,this.jardin);
       this.model3 = new Personaje();
       //this.add (this.model);
       this.add (this.model2);
@@ -59,7 +62,7 @@ class MyScene extends THREE.Scene {
       this.remove(this.model3);
       this.remove(this.model2);
       this.remove(this.camera);
-      this.model2 = new EscenarioDinamico(12);
+      this.model2 = new EscenarioDinamico(12,this.garaje,this.jardin);
       this.model3 = new Personaje();
       this.add (this.model2);
       this.add (this.model3);

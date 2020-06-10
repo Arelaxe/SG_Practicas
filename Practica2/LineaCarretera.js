@@ -1,9 +1,9 @@
  class LineaCarretera extends THREE.Object3D {
-    constructor(num_linea) {
+    constructor(num_linea,garaje) {
       super();
   
       this.linea = this.createLinea(num_linea);
-      this.garaje = new Garaje();
+      this.garaje = garaje;
       this.trampas = [];
 
       this.add(this.linea);
@@ -11,7 +11,7 @@
       this.hay_coche = false;  
     }
     
-    createLinea(num_linea){
+    createLinea(num_linea,garaje){
         var linea = new THREE.Group();
         this.num_linea = num_linea;
 

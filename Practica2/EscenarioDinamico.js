@@ -1,10 +1,12 @@
 class EscenarioDinamico extends THREE.Object3D {
-    constructor(num_lineas) {
+    constructor(num_lineas,garaje,jardin) {
       super();
   
       this.obstaculos = [];
       this.trampas = [] ;
-      this.escenario = this.createEscenario(num_lineas);
+      this.garaje = garaje;
+      this.jardin = jardin;
+      this.escenario = this.createEscenario(num_lineas,garaje,jardin);
       this.num_lineas = num_lineas;
 
       this.add(this.escenario);
@@ -13,7 +15,7 @@ class EscenarioDinamico extends THREE.Object3D {
     }
 
     
-    createEscenario(num_lineas){
+    createEscenario(num_lineas,garaje,jardin){
         var escenario = new THREE.Group();
 
         var linea;
@@ -34,10 +36,10 @@ class EscenarioDinamico extends THREE.Object3D {
                 linea = new LineaAgua(i);
             }
             else if (tipo_linea >= 1 && tipo_linea < 2){
-                linea = new LineaCesped(i);
+                linea = new LineaCesped(i,this.jardin);
             }
             else{
-                linea = new LineaCarretera(i);
+                linea = new LineaCarretera(i,this.garaje);
 
             }
         
@@ -75,10 +77,10 @@ class EscenarioDinamico extends THREE.Object3D {
                 linea = new LineaAgua(this.num_linea_actual);
             }
             else if (tipo_linea >= 1 && tipo_linea < 2){
-                linea = new LineaCesped(this.num_linea_actual);
+                linea = new LineaCesped(this.num_linea_actual,this.jardin);
             }
             else{
-                linea = new LineaCarretera(this.num_linea_actual);
+                linea = new LineaCarretera(this.num_linea_actual,this.garaje);
             }
         
             this.num_linea_actual++;
