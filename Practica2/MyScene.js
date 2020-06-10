@@ -244,11 +244,6 @@ class MyScene extends THREE.Scene {
             this.direccion = MyScene.RIGHT;
           }
         }
-        if(letra.toUpperCase() == "S"){
-          this.estado = MyScene.DEATH ;
-          this.partida = MyScene.NOTSTARTED;
-          document.getElementById("gameover").style.display = "none";
-        }
     }
     else if (this.partida == MyScene.NOTSTARTED){
       if(letra.toUpperCase() == " "){
@@ -290,11 +285,6 @@ class MyScene extends THREE.Scene {
             this.posz += 5;
             this.direccion = MyScene.RIGHT;
           }
-        }
-        if(tecla == 40){
-          this.estado = MyScene.DEATH ;
-          this.partida = MyScene.NOTSTARTED;
-          document.getElementById("gameover").style.display = "none";
         }
     }
     else if (this.partida == MyScene.NOTSTARTED){
