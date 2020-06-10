@@ -274,10 +274,6 @@ class MyScene extends THREE.Scene {
       if ((this.model2.num_linea_actual-this.model2.num_lineas-4)*5 > this.model3.position.x){
         this.estado = MyScene.DEATH;
       }
-      
-      // Se actualiza el resto del modelo
-      //this.model.update();
-     
 
       this.stats.end();
       
@@ -444,28 +440,17 @@ class MyScene extends THREE.Scene {
     }
 
   aplastar(){
-    var escala = 1 ;
-    var tiempototal = 2000 ;
-    var velocidad = escala/tiempototal ;
-    if(this.estado ==  MyScene.DEATH){
-      this.tiempo = Date.now();
-      this.estado = MyScene.WAIT ;
-      this.dead = true ;
-    }
-    if(this.estado == MyScene.WAIT && this.dead){
-      var time = Date.now();
-      var elapsed = time-this.tiempo ;
-      if (elapsed < tiempototal)
-        this.model3.scale.y = velocidad * elapsed/tiempototal ;
-      else {
-        this.estado = MyScene.DEAD;
-        this.partida = MyScene.NOTSTARTED ;
-        this.model3.position.y = 0.3 ;
-        document.getElementById("gameover").style.display = "block";
-        document.getElementById("gameover").innerHTML = "<p>Game Over</p><p>Pulsa espacio para jugar otra vez</p>Tu puntuación es: " + this.puntuacion;
-      } 
+    if (this.estado == MyScene.DEATH){
+      this.dead = true;
+      this.model3.scale.y = 0.01;
+      this.model3.position.y = 0.3;
+      this.estado = MyScene.DEAD;
+      this.partida = MyScene.NOTSTARTED ;
+      document.getElementById("gameover").style.display = "block";
+      document.getElementById("gameover").innerHTML = "<p>Game Over</p><p>Pulsa espacio para jugar otra vez</p>Tu puntuación es: " + this.puntuacion;
     }
   }
+
   setMessage (str) {
     document.getElementById("msg").innerHTML = "Puntuación: "+str;
   }
