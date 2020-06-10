@@ -21,6 +21,7 @@ class Furgoneta extends THREE.Object3D{
                     bounding.geometry.computeBoundingBox();
                     var bb = bounding.geometry.boundingBox;
                     var geomCollider = new THREE.BoxBufferGeometry(bb.max.x-bb.min.x,bb.max.y-bb.min.y,bb.max.z-bb.min.z);
+                    geomCollider.scale(1.1,1.1,1.1);
                     geomCollider.translate(0.1, 21,-0.5);
                     var matCollider = new THREE.MeshPhongMaterial({color:0xbb0000, transparent:true, opacity:0.0});
                     that.collider.geometry = geomCollider;

@@ -22,6 +22,7 @@ constructor(){
                 geomCollider.translate(0,0,-0.5);
                 var matCollider = new THREE.MeshPhongMaterial({color:0xabc, transparent:true, opacity:0.0});
                 var collider = new THREE.Mesh(geomCollider,matCollider);
+                collider.scale.set(1.1,1.1,1.1);
                 collider.add(modelo);
                 that.add(collider);
             },null,null);
